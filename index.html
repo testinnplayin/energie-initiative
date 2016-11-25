@@ -6,9 +6,82 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<title>Mockup | Initiative Visionneuse</title>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<link href="styles/main.css" />
+	<link href="styles/main.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
+	<header>
+		<div class="container">
+			<h1>Some awesome title here</h1>
+			<p>Instructions here</p>
+		</div>
+	</header>
 
+	<main>
+		<div class="container">
+			<section class="search-box">
+				<form class="form-like search-form js-search-form">
+					<div class="form-group search-group js-search-group">
+						<label for="search-term" class="sr-only">Search Box</label>
+						<div class="col-xs-12 col-md-10">
+							<input type="text" class="form-control" id="search-term" placeholder="Search" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-2">
+							<button class="btn btn-default search-btn js-search-btn" type="submit">Search</button>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="checkbox-inline checkboxes">
+							<label for="inline-check-1" class="col-xs-6 col-sm-4 col-md-4">
+								<input type="checkbox" id="inline-check-1" value="option1" />
+								Biodiversité
+							</label>
+							<label for="inline-check-2" class="col-xs-6 col-sm-4 col-md-4">
+								<input type="checkbox" id="inline-check-2" value="option2" />
+								Changement climatique
+							</label>
+							<label for="inline-check-3" class="col-xs-6 col-sm-4 col-md-4">
+								<input type="checkbox" id="inline-check-3" value="option3">
+								Déchets
+							</label>
+							<label for="inline-check-4" class="col-xs-6 col-sm-4 col-md-4">
+								<input type="checkbox" id="inline-check-4" value="option4" />
+								Energies renouvelables
+							</label>
+							<label for="inline-check-5" class="col-xs-6 col-sm-4 col-md-4">
+								<input type="checkbox" id="inline-check-5" value="option5" />
+								Mobilité et transports durables
+							</label>
+							<label for="inline-check-6" class="col-xs-6 col-sm-4 col-md-4">
+								<input type="checkbox" id="inline-check-6" value="option6" />
+								Rénovation énergétique
+							</label>
+							<label for="inline-check-7" class="col-xs-6 col-sm-4 col-md-4">
+								<input type="checkbox" id="inline-check-7" value="option7" />
+								Santé
+							</label>
+						</div>
+						<div class="checkbox-inline">
+
+						</div>
+					</div>
+				</form>
+			</section>
+			<section class="map">
+				<div class="map-box">
+					<p>MAP</p>
+					<!-- map goes here -->
+				</div>
+			</section>
+		</div>
+	</main>
+
+	<!-- SCRIPTS -->
+	<!-- Libraries -->
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<!-- Custom scripts -->
+	<script scr="scripts/app.js"></script>
 </body>
 </html>
