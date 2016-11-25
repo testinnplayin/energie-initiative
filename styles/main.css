@@ -1,0 +1,36 @@
+/* GENERAL STYLES */
+
+html {
+	box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+h1,
+p {
+	text-align: center;
+}
+
+/* SEARCH BOX STYLES */
+
+.search-btn {
+	margin: 10px 110px;
+}
+
+/* MAP BOX STYLES */
+
+.map {
+	margin: 0 auto;
+}
+
+.map-box {
+	border: 1px solid #000;
+	height: 400px;
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+}
