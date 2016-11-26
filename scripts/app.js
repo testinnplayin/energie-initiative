@@ -23,6 +23,44 @@ var state = {
 		"picardie" : "hauts-de-france",
 		"poitou-charentes" : "nouvelle-aquitaine",
 		"rhone-alpes" : "auvergne-rhone-alpes",
-
-	}
+	},
+	views : ["index", "results"]
 };
+
+//display functions
+
+//ajax call functions
+
+function getData() {
+	var params = {
+
+	};
+
+	$.ajax(params, query)
+	.done(function(data) {
+		console.log('successful call');
+		console.log(data);
+	})
+	.fail(function(err) {
+		console.log('unsuccessful call');
+		console.log('The error is ' + err);
+	}).
+	always(function() {
+		console.log('request complete');
+	});
+}
+
+//event handler functions
+
+function handleSubmit() {
+	$('.js-search-btn').click(function(e) {
+		e.preventDefault();
+
+		var query = $('input[type="text"]').val();
+		console.log(query);
+
+		var newUrl = "https://www.data.gouv.fr/";
+	});
+}
+
+$(document).ready(handleSubmit);
