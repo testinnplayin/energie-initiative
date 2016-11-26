@@ -31,12 +31,10 @@ var state = {
 
 //ajax call functions
 
-function getData() {
-	var params = {
+function getData(address) {
+	
 
-	};
-
-	$.ajax(params, query)
+	$.ajax(address)
 	.done(function(data) {
 		console.log('successful call');
 		console.log(data);
@@ -44,10 +42,24 @@ function getData() {
 	.fail(function(err) {
 		console.log('unsuccessful call');
 		console.log('The error is ' + err);
-	}).
-	always(function() {
+	})
+	.always(function() {
 		console.log('request complete');
 	});
+}
+
+//logic functions
+
+function convertToNewReg(query) {
+	var newRegion = "";
+	
+	for (var oldRegion in state.oldRegions) {
+		if (query === oldRegion) {
+			newRegion = state.oldRegions[oldRegion];
+			return newRegion;
+		}
+	}
+	return query;
 }
 
 //event handler functions
@@ -59,7 +71,10 @@ function handleSubmit() {
 		var query = $('input[type="text"]').val();
 		console.log(query);
 
-		var newUrl = "https://www.data.gouv.fr/";
+		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-161307/initiatives_aquitaine.json";
+		console.log(newUrl);
+
+		getData(newUrl);
 	});
 }
 
