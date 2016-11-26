@@ -1,10 +1,72 @@
 'use strict'
 
 var state = {
-	regions : ["auvergne-rhone-alpes", "bourgogne-franche-comte", "bretagne","centre-val-de-loire", 
-	"corse", "grand-est", "guadeloupe", "guyane", "hauts-de-france", "ile-de-france", "la-reunion", 
-	"martinique", "mayotte", "normandie", "nouvelle-aquitaine", "occitanie", "pays-de-la-loire", 
-	"provence-alpes-cote-dazure"],
+	newRegions : {
+		"auvergne-rhone-alpes" : {
+			"auvergne" : "161248",
+			"rhone-alpes" : "160406"
+		},
+		"bourgogne-franche-comte" : {
+			"bourgogne" : "161209",
+			"franche-comte" : "161030",
+		},
+		"bretagne" : {
+			"bretagne" : "161146"
+		},
+		"centre-val-de-loire" : {
+			"centre" : "161127",
+		},
+		"corse" : {
+			"corse" : "161049",
+		},
+		"grand-est" : {
+			"alsace" : "161326",
+			"lorraine" : "160729",
+		},
+		"guadeloupe" : {
+			"guadeloupe" : "161008",
+		},
+		"guyane" : {
+			"guyane" : "160941",
+		},
+		"hauts-de-france" : {
+			"nord-pas-de-calais" : "160629",
+			"picardie" : "160537",
+		},
+		"ile-de-france" : {
+			"ile-de-france" : "160859",
+		},
+		"la-reunion" : {
+			"la-reunion" : "160815",
+		},
+		"martinique" : {
+			"martinique" : "160711",
+		},
+		"mayotte" : {
+			"mayotte" : "161405",	
+		},
+		"normandie" : {
+			"basse-normandie" : "161229",
+			"haute-normandie" : "160915",
+		},
+		"nouvelle-aquitaine" : {
+			"aquitaine" : "161307",
+			"limousin" : "160754",
+			"poitou-charentes" : "160506",
+		},
+		"occitanie" : {
+			"midi-pyrenees" : "160653",
+		},
+		"pays-de-la-loire" : {
+			"pays-de-la-loire" : "160601",
+		},
+		"provence-alpes-cote-dazure" : {
+			"provence-alpes-cote-dazure" : "160434",
+		},
+		"lensemble" : {
+			"lensemble" : "160312"
+		}
+	},
 	oldRegions : {
 		"alsace" : "grand-est",
 		"aquitaine" : "nouvelle-aquitaine",
@@ -24,7 +86,7 @@ var state = {
 		"poitou-charentes" : "nouvelle-aquitaine",
 		"rhone-alpes" : "auvergne-rhone-alpes",
 	},
-	views : ["index", "results"]
+	views : ["index", "results"],
 };
 
 //display functions
@@ -71,7 +133,9 @@ function handleSubmit() {
 		var query = $('input[type="text"]').val();
 		console.log(query);
 
-		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-161307/initiatives_aquitaine.json";
+		var newRegion = convertToNewReg(query);
+
+		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + state.newRegions[newRegion][query] + "/initiatives_" + query + ".json";
 		console.log(newUrl);
 
 		getData(newUrl);
