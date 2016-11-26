@@ -118,10 +118,20 @@ function convertToNewReg(query) {
 	for (var oldRegion in state.oldRegions) {
 		if (query === oldRegion) {
 			newRegion = state.oldRegions[oldRegion];
+
 			return newRegion;
 		}
 	}
+
 	return query;
+}
+
+//other functions
+
+function processQuery(query) {
+	var processedQ = query.toLowerCase().replace(/ /g, '-').replace("'", "");
+
+	return processedQ;
 }
 
 //event handler functions
@@ -131,14 +141,19 @@ function handleSubmit() {
 		e.preventDefault();
 
 		var query = $('input[type="text"]').val();
-		console.log(query);
+		console.log("old q " + query);
 
-		var newRegion = convertToNewReg(query);
+		var newQuery = processQuery(query);
+		console.log("new q " + newQuery);
+		
+		var newRegion = convertToNewReg(newQuery);
+		console.log("new region " + newRegion);
 
-		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + state.newRegions[newRegion][query] + "/initiatives_" + query + ".json";
+		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + state.newRegions[newRegion][newQuery] + "/initiatives_" 
+		+ newQuery + ".json";
 		console.log(newUrl);
 
-		getData(newUrl);
+		//getData(newUrl);
 	});
 }
 
