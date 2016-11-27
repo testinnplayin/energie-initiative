@@ -8,60 +8,60 @@ var state = {
 		},
 		"bourgogne-franche-comte" : {
 			"bourgogne" : "161209",
-			"franche-comte" : "161030",
+			"franche-comte" : "161030"
 		},
 		"bretagne" : {
 			"bretagne" : "161146"
 		},
 		"centre-val-de-loire" : {
-			"centre" : "161127",
+			"centre" : "161127"
 		},
 		"corse" : {
-			"corse" : "161049",
+			"corse" : "161049"
 		},
 		"grand-est" : {
 			"alsace" : "161326",
-			"lorraine" : "160729",
+			"lorraine" : "160729"
 		},
 		"guadeloupe" : {
-			"guadeloupe" : "161008",
+			"guadeloupe" : "161008"
 		},
 		"guyane" : {
-			"guyane" : "160941",
+			"guyane" : "160941"
 		},
 		"hauts-de-france" : {
 			"nord-pas-de-calais" : "160629",
-			"picardie" : "160537",
+			"picardie" : "160537"
 		},
 		"ile-de-france" : {
-			"ile-de-france" : "160859",
+			"ile-de-france" : "160859"
 		},
 		"la-reunion" : {
-			"la-reunion" : "160815",
+			"la-reunion" : "160815"
 		},
 		"martinique" : {
-			"martinique" : "160711",
+			"martinique" : "160711"
 		},
 		"mayotte" : {
-			"mayotte" : "161405",	
+			"mayotte" : "161405"
 		},
 		"normandie" : {
 			"basse-normandie" : "161229",
-			"haute-normandie" : "160915",
+			"haute-normandie" : "160915"
 		},
 		"nouvelle-aquitaine" : {
 			"aquitaine" : "161307",
 			"limousin" : "160754",
-			"poitou-charentes" : "160506",
+			"poitou-charentes" : "160506"
 		},
 		"occitanie" : {
-			"midi-pyrenees" : "160653",
+			"midi-pyrenees" : "160653"
 		},
 		"pays-de-la-loire" : {
-			"pays-de-la-loire" : "160601",
+			"pays-de-la-loire" : "160601"
 		},
 		"provence-alpes-cote-dazure" : {
-			"provence-alpes-cote-dazure" : "160434",
+			"provence-alpes-cote-dazure" : "160434"
 		},
 		"lensemble" : {
 			"lensemble" : "160312"
@@ -111,6 +111,15 @@ function getData(address) {
 }
 
 //logic functions
+
+function checkQuery(query) {
+	if (query === "" || query === undefined) {
+		$('.js-search-form-group').append('<p>Please enter a valid region name</p>')
+	} else {
+		var newQuery = processQuery(query);
+		return newQuery;
+	}
+}
 
 function convertToNewReg(query) {
 	var newRegion = "";
@@ -169,7 +178,7 @@ function processQuery(query) {
 	var processedQ = query.toLowerCase().replace("'", "").replace(/ /g, '-'); //"île-de-france"
 	console.log(processedQ);
 
-	var strippedQ = stripAccent(processedQ);
+	var strippedQ = stripAccent(processedQ); //ile-de-france
 
 	return strippedQ;
 }
@@ -183,7 +192,7 @@ function handleSubmit() {
 		var query = $('input[type="text"]').val();
 		console.log("old q " + query);
 
-		var newQuery = processQuery(query);
+		var newQuery = checkQuery(query);
 		console.log("new q " + newQuery);
 		
 		var newRegion = convertToNewReg(newQuery);
