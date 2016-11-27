@@ -129,9 +129,40 @@ function convertToNewReg(query) {
 //other functions
 
 function processQuery(query) {
-	var processedQ = query.toLowerCase().replace(/ /g, '-').replace("'", "");
+	var processedQ = query.toLowerCase().replace("'", "").replace(/ /g, '-'); //"île-de-france"
+	console.log(processedQ);
+	var noAccentQ = "";
 
-	return processedQ;
+	for (var letter of processedQ) {
+		switch(letter) {
+				case "à":
+				case "â":
+					noAccentQ = processedQ.replace(letter, "a");
+					return noAccentQ;
+				case "ç":
+					noAccentQ = processedQ.replace(letter, "c");
+					return noAccentQ;
+				case "é":
+				case "ë":
+				case "è":
+					noAccentQ = processedQ.replace(letter, "e");
+					return noAccentQ;
+				case "î":
+				case "ï":
+					noAccentQ = processedQ.replace(letter, "i");
+					console.log("i triggered" + noAccentQ);
+					return noAccentQ;
+				case "ü":
+				case "ù":
+				case "û":
+					noAccentQ = processedQ.replace(letter, "u");
+					return noAccentQ;
+				default:
+					noAccentQ = processedQ;
+		}
+	}
+	
+	
 }
 
 //event handler functions
