@@ -126,43 +126,52 @@ function convertToNewReg(query) {
 	return query;
 }
 
-//other functions
+//processing functions
 
-function processQuery(query) {
-	var processedQ = query.toLowerCase().replace("'", "").replace(/ /g, '-'); //"île-de-france"
-	console.log(processedQ);
+function stripAccent(processedQ) {
 	var noAccentQ = "";
 
 	for (var letter of processedQ) {
+		var reggie = new RegExp(letter, "g");
+
 		switch(letter) {
 				case "à":
 				case "â":
-					noAccentQ = processedQ.replace(letter, "a");
+					noAccentQ = processedQ.replace(reggie, "a");
 					return noAccentQ;
 				case "ç":
-					noAccentQ = processedQ.replace(letter, "c");
+					noAccentQ = processedQ.replace(reggie, "c");
 					return noAccentQ;
 				case "é":
 				case "ë":
 				case "è":
-					noAccentQ = processedQ.replace(letter, "e");
+					noAccentQ = processedQ.replace(reggie, "e");
 					return noAccentQ;
 				case "î":
 				case "ï":
-					noAccentQ = processedQ.replace(letter, "i");
+					noAccentQ = processedQ.replace(reggie, "i");
 					console.log("i triggered" + noAccentQ);
 					return noAccentQ;
 				case "ü":
 				case "ù":
 				case "û":
-					noAccentQ = processedQ.replace(letter, "u");
+					noAccentQ = processedQ.replace(reggie, "u");
 					return noAccentQ;
 				default:
-					noAccentQ = processedQ;
+					noAccentQ = processedQ;	
 		}
 	}
 	
-	
+	return noAccentQ;
+}
+
+function processQuery(query) {
+	var processedQ = query.toLowerCase().replace("'", "").replace(/ /g, '-'); //"île-de-france"
+	console.log(processedQ);
+
+	var strippedQ = stripAccent(processedQ);
+
+	return strippedQ;
 }
 
 //event handler functions
