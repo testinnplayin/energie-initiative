@@ -93,8 +93,14 @@ var state = {
 
 //ajax call functions
 
-function getData(address) {
-	
+function getData(addressCont) {
+	var address;
+	if (Array.isArray(addressCont)) {
+		address = addressCont.pop();
+		console.log("address from array " + address);
+	} else {
+		address = addressCont;
+	}
 
 	$.ajax(address)
 	.done(function(data) {
@@ -115,7 +121,7 @@ function getData(address) {
 function checkQuery(query) {
 	if (query === "" || query === undefined) {
 		$('.js-search-form-group').append('<p>Please enter a valid region name</p>')
-	} else {
+	} else { //this will change when adding theme search capabilities
 		var newQuery = processQuery(query);
 		var region = checkRegion(newQuery);
 		return region;
@@ -123,10 +129,17 @@ function checkQuery(query) {
 }
 
 function checkRegion(region) {
-	if (region === "centre-val-de-loire") {
-		region = "centre";
-		return region;
+	var keys = Object.keys(state.newRegions);
+	for (var key of keys) {
+		if (region === key) {
+			var newRegion = state.newRegions[key];
+			console.log("new region " + newRegion);
+
+			return newRegion;
+		}
 	}
+	
+	return region;
 }
 
 function convertToNewReg(query) {
@@ -135,12 +148,44 @@ function convertToNewReg(query) {
 	for (var oldRegion in state.oldRegions) {
 		if (query === oldRegion) {
 			newRegion = state.oldRegions[oldRegion];
-
+			console.log("convertToNewReg " + newRegion);
 			return newRegion;
 		}
 	}
 
 	return query;
+}
+
+//other functions
+
+function generateEndpoint(query) { //for nouvelle-aquitaine we have an object containing three different old regions and their times of addition to the database
+	var regionContainer = [];
+	console.log("The query is " + query);
+
+	
+	var newRegion = convertToNewReg(query);
+
+	if (typeof query === 'object') {
+		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + state.newRegions['lensemble']['lensemble'] 
+		+ "/initiatives_lensemble.json";
+
+		for (var region in query) {
+			regionContainer.push(region);
+		}
+		regionContainer.push(newUrl);
+		console.log(regionContainer);
+
+		return regionContainer;
+	}
+
+	var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + state.newRegions[newRegion][query] + "/initiatives_" 
+	+ query + ".json";
+
+	console.log(newUrl);
+
+	return newUrl;
+
+	
 }
 
 //processing functions
@@ -167,7 +212,6 @@ function stripAccent(processedQ) {
 				case "î":
 				case "ï":
 					noAccentQ = processedQ.replace(reggie, "i");
-					console.log("i triggered" + noAccentQ);
 					return noAccentQ;
 				case "ü":
 				case "ù":
@@ -203,14 +247,11 @@ function handleSubmit() {
 		var newQuery = checkQuery(query);
 		console.log("new q " + newQuery);
 		
-		var newRegion = convertToNewReg(newQuery);
-		console.log("new region " + newRegion);
+		var newUrlCont = generateEndpoint(newQuery);
 
-		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + state.newRegions[newRegion][newQuery] + "/initiatives_" 
-		+ newQuery + ".json";
-		console.log(newUrl);
+		
 
-		//getData(newUrl);
+		getData(newUrlCont);
 	});
 }
 
