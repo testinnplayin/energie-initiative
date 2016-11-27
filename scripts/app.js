@@ -117,7 +117,15 @@ function checkQuery(query) {
 		$('.js-search-form-group').append('<p>Please enter a valid region name</p>')
 	} else {
 		var newQuery = processQuery(query);
-		return newQuery;
+		var region = checkRegion(newQuery);
+		return region;
+	}
+}
+
+function checkRegion(region) {
+	if (region === "centre-val-de-loire") {
+		region = "centre";
+		return region;
 	}
 }
 
