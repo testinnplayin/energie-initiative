@@ -1,6 +1,10 @@
 'use strict'
 
 var state = {
+	currentView : 'index',
+};
+
+var regionLibrary = {
 	newRegions : {
 		"auvergne-rhone-alpes" : {
 			"auvergne" : "161248",
@@ -96,57 +100,61 @@ var state = {
 		"provence-alpes-cote-dazure" : "provence-alpes-cote-dazure",
 		"rhone-alpes" : "auvergne-rhone-alpes",
 	},
-	views : ["index", "results"],
 };
 
-var resultTemplate = (
-	'<div class="panel panel-default js-panel">'
-	+ '</div>'
-);
+
 
 //display functions
 
-function renderResults(data) {
-	var result = '',
+function renderState(currentState, data) {
+	if (currentState === "results") {
+		var result = '',
 		numOfResults = 10,
 		lng = data.count;
 
-	if (lng > 0) {
-		for (var i = 0; i <= numOfResults; i++) {
-			result += (
-				"<div class=\"panel-heading\">"
-					+ data.initiatives[i].title
-				+ "</div>"
-				+ "<div class=\"panel-body\">"
-					+ "<img src=\"http://www.votreenergiepourlafrance.fr/medias/patterns/" + data.initiatives[i].theme + "/large.jpg\" class=\"img-responsive\" />"
-					+ "<p>" + data.initiatives[i].body + "</p>"
-				+ "</div>"
-				+ "<ul>"
-					+ "<li>"
-						+ "<p>Theme: " + data.initiatives[i].theme + "</p>"
-					+ "</li>"
-					+ "<li>"
-						+ "<p>Old region: " + data.initiatives[i].location.region + "</p>"
-					+ "</li>"
-					+ "<li>"
-						+ "<p>Department: " + data.initiatives[i].location.department  + "</p>"
-					+ "</li>"
-					+ "<li>"
-						+ "<p><a href=\"" + data.initiatives[i].url + "\">Link to Source</a></p>"
-					+ "</li>"
-				+ "</ul>"
-				);
-		}
-	}
+		$('.js-result-container').find('.panel').remove();
 
-	$('.js-result-container').html(result);
+		if (lng > 0) {
+			for (var i = 0; i <= numOfResults; i++) {
+				result += (
+					+ "<div class=\"panel panel-default js-panel\""
+						+ "<div class=\"panel-heading\">"
+							+ data.initiatives[i].title
+						+ "</div>"
+						+ "<div class=\"panel-body\">"
+							+ "<img src=\"http://www.votreenergiepourlafrance.fr/medias/patterns/" + data.initiatives[i].theme + "/large.jpg\" class=\"img-responsive\" />"
+							+ "<p>" + data.initiatives[i].body + "</p>"
+						+ "</div>"
+						+ "<ul>"
+							+ "<li>"
+								+ "<p>Theme: " + data.initiatives[i].theme + "</p>"
+							+ "</li>"
+							+ "<li>"
+								+ "<p>Old region: " + data.initiatives[i].location.region + "</p>"
+							+ "</li>"
+							+ "<li>"
+								+ "<p>Department: " + data.initiatives[i].location.department  + "</p>"
+							+ "</li>"
+							+ "<li>"
+								+ "<p><a href=\"" + data.initiatives[i].url + "\">Link to Source</a></p>"
+							+ "</li>"
+						+ "</ul>"
+					+ "</div>"
+					);
+			}
+		}
+
+		$('.js-result-container').html(result);
+	}
 }
+
 
 
 //ajax call functions
 
 function getData(addressCont) {
 	var address;
+
 	if (Array.isArray(addressCont)) {
 		address = addressCont.pop();
 		console.log("address from array " + address);
@@ -158,6 +166,7 @@ function getData(addressCont) {
 	.done(function(data) {
 		console.log('successful call');
 		console.log(data);
+		return data;
 	})
 	.fail(function(err) {
 		console.log('unsuccessful call');
@@ -167,6 +176,8 @@ function getData(addressCont) {
 		console.log('request complete');
 	});
 }
+
+
 
 //logic functions
 
@@ -182,14 +193,14 @@ function checkQuery(query) {
 }
 
 function checkRegion(region) {
-	var keys = Object.keys(state.newRegions);
+	var keys = Object.keys(regionLibrary.newRegions);
 
 	for (var key of keys) {
 		if (region === key) {
-			var lng = Object.keys(state.newRegions[region]).length;
+			var lng = Object.keys(regionLibrary.newRegions[region]).length;
 
 			if (lng > 1) {
-				var newRegion = state.newRegions[key];
+				var newRegion = regionLibrary.newRegions[key];
 
 				return newRegion;
 			}
@@ -203,13 +214,22 @@ function convertToNewReg(query) {
 	var newRegion = "";
 	console.log("region conversion triggered");
 	
-	for (var oldRegion in state.oldRegions) {
+	for (var oldRegion in regionLibrary.oldRegions) {
 		if (query === oldRegion && typeof query !== 'object') {
-			newRegion = state.oldRegions[oldRegion];
+			newRegion = regionLibrary.oldRegions[oldRegion];
 			console.log("convertToNewReg " + newRegion);
 			return newRegion;
 		} 
 	}
+}
+
+function checkState(currentState) {
+	if (currentState === 'index') {
+		currentState = 'results';
+		return currentState;
+	}
+
+	return currentState;
 }
 
 //other functions
@@ -221,7 +241,7 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 	var newRegion = convertToNewReg(query);
 
 	if (typeof query === 'object') {
-		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + state.newRegions['lensemble']['lensemble'] 
+		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + regionLibrary.newRegions['lensemble']['lensemble'] 
 		+ "/initiatives_all.json";
 
 		for (var region in query) {
@@ -234,7 +254,7 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 		return regionContainer;
 	}
 
-	var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + state.newRegions[newRegion][query] + "/initiatives_" 
+	var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + regionLibrary.newRegions[newRegion][query] + "/initiatives_" 
 	+ query + ".json";
 
 	console.log(newUrl);
@@ -293,23 +313,26 @@ function processQuery(query) {
 
 function handleActions(e) {
 	e.preventDefault();
+	var currentState = state.currentView,
+		status = checkState(currentState);
+		console.log("current state is " + status);
 
-	var query = $('input[type="text"]').val();
-	console.log("old q " + query);
-
-	var newQuery = checkQuery(query);
-	console.log("new q " + newQuery);
+	var query = $('input[type="text"]').val(),
+		newQuery = checkQuery(query),	
+		newUrlCont = generateEndpoint(newQuery),
+		data = getData(newUrlCont);
+	console.log("Title of story is " + data);
 	
-	var newUrlCont = generateEndpoint(newQuery);
-
-	
-
-	getData(newUrlCont);
+	renderState(status, data);
 }
 
 function handleSubmit() {
+	var currentState = state.currentView; //'initial'
+
 	$('.js-search-btn').click(function(e) {
-		handleActions(e);
+		handleActions(e),
+		console.log(status);
+		console.log(data);
 	});
 
 	
@@ -318,13 +341,11 @@ function handleSubmit() {
 		var enterKey = 13;
 
 		if (e.which === enterKey) {
-			handleActions(e);
+			var data = handleActions(e),
+				status = checkState(currentState);
+			console.log(status);
 		}
 	});
-}
-
-function handleState() {
-	
 }
 
 $(document).ready(handleSubmit);
