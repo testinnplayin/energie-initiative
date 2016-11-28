@@ -251,21 +251,35 @@ function processQuery(query) {
 
 //event handler functions
 
+function handleActions(e) {
+	e.preventDefault();
+
+	var query = $('input[type="text"]').val();
+	console.log("old q " + query);
+
+	var newQuery = checkQuery(query);
+	console.log("new q " + newQuery);
+	
+	var newUrlCont = generateEndpoint(newQuery);
+
+	
+
+	getData(newUrlCont);
+}
+
 function handleSubmit() {
 	$('.js-search-btn').click(function(e) {
-		e.preventDefault();
+		handleActions(e);
+	});
 
-		var query = $('input[type="text"]').val();
-		console.log("old q " + query);
+	
 
-		var newQuery = checkQuery(query);
-		console.log("new q " + newQuery);
-		
-		var newUrlCont = generateEndpoint(newQuery);
+	$('input[type="text"]').keypress(function(e) {
+		var enterKey = 13;
 
-		
-
-		getData(newUrlCont);
+		if (e.which === enterKey) {
+			handleActions(e);
+		}
 	});
 }
 
