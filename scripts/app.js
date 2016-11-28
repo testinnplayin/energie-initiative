@@ -99,11 +99,50 @@ var state = {
 	views : ["index", "results"],
 };
 
+var resultTemplate = (
+	'<div class="panel panel-default js-panel">'
+	+ '</div>'
+);
+
 //display functions
 
 function renderResults(data) {
-//code for rendering results template here
+	var result = '',
+		numOfResults = 10,
+		lng = data.count;
+
+	if (lng > 0) {
+		for (var i = 0; i <= numOfResults; i++) {
+			result += (
+				"<div class=\"panel-heading\">"
+					+ data.initiatives[i].title
+				+ "</div>"
+				+ "<div class=\"panel-body\">"
+					+ "<img src=\"http://www.votreenergiepourlafrance.fr/medias/patterns/" + data.initiatives[i].theme + "/large.jpg\" class=\"img-responsive\" />"
+					+ "<p>" + data.initiatives[i].body + "</p>"
+				+ "</div>"
+				+ "<ul>"
+					+ "<li>"
+						+ "<p>Theme: " + data.initiatives[i].theme + "</p>"
+					+ "</li>"
+					+ "<li>"
+						+ "<p>Old region: " + data.initiatives[i].location.region + "</p>"
+					+ "</li>"
+					+ "<li>"
+						+ "<p>Department: " + data.initiatives[i].location.department  + "</p>"
+					+ "</li>"
+					+ "<li>"
+						+ "<p><a href=\"" + data.initiatives[i].url + "\">Link to Source</a></p>"
+					+ "</li>"
+				+ "</ul>"
+				);
+		}
+	}
+
+	$('.js-result-container').html(result);
 }
+
+
 //ajax call functions
 
 function getData(addressCont) {
@@ -171,8 +210,6 @@ function convertToNewReg(query) {
 			return newRegion;
 		} 
 	}
-
-	
 }
 
 //other functions
@@ -284,6 +321,10 @@ function handleSubmit() {
 			handleActions(e);
 		}
 	});
+}
+
+function handleState() {
+	
 }
 
 $(document).ready(handleSubmit);
