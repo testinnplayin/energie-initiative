@@ -101,6 +101,9 @@ var state = {
 
 //display functions
 
+function renderResults(data) {
+//code for rendering results template here
+}
 //ajax call functions
 
 function getData(addressCont) {
