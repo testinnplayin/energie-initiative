@@ -73,17 +73,27 @@ var state = {
 		"auvergne" : "auvergne-rhone-alpes",
 		"basse-normandie" : "normandie",
 		"bourgogne" : "bourgogne-franche-comte",
+		"bretagne" : "bretagne",
 		"centre" : "centre-val-de-loire",
 		"champagne-ardenne" : "grand-est",
+		"corse" : "corse",
 		"franche-comte" : "bourgogne-franche-comte",
+		"guadeloupe" : "guadeloupe",
+		"guyane" : "guyane",
 		"haute-normandie" : "normandie",
+		"ile-de-france" : "ile-de-france",
 		"languedoc-rousillon" : "occitanie",
+		"la-reunion" : "la-reunion",
 		"limousin" : "nouvelle-aquitaine",
 		"lorraine" : "grand-est",
+		"martinique" : "martinique",
+		"mayotte" : "mayotte",
 		"midi-pyrenees" : "occitanie",
 		"nord-pas-de-calais" : "hauts-de-france",
+		"pays-de-la-loire" : "pays-de-la-loire",
 		"picardie" : "hauts-de-france",
 		"poitou-charentes" : "nouvelle-aquitaine",
+		"provence-alpes-cote-dazure" : "provence-alpes-cote-dazure",
 		"rhone-alpes" : "auvergne-rhone-alpes",
 	},
 	views : ["index", "results"],
@@ -124,18 +134,23 @@ function checkQuery(query) {
 	} else { //this will change when adding theme search capabilities
 		var newQuery = processQuery(query);
 		var region = checkRegion(newQuery);
+
 		return region;
 	}
 }
 
 function checkRegion(region) {
 	var keys = Object.keys(state.newRegions);
+
 	for (var key of keys) {
 		if (region === key) {
-			var newRegion = state.newRegions[key];
-			console.log("new region " + newRegion);
+			var lng = Object.keys(state.newRegions[region]).length;
 
-			return newRegion;
+			if (lng > 1) {
+				var newRegion = state.newRegions[key];
+
+				return newRegion;
+			}
 		}
 	}
 	
@@ -144,16 +159,17 @@ function checkRegion(region) {
 
 function convertToNewReg(query) {
 	var newRegion = "";
+	console.log("region conversion triggered");
 	
 	for (var oldRegion in state.oldRegions) {
-		if (query === oldRegion) {
+		if (query === oldRegion && typeof query !== 'object') {
 			newRegion = state.oldRegions[oldRegion];
 			console.log("convertToNewReg " + newRegion);
 			return newRegion;
-		}
+		} 
 	}
 
-	return query;
+	
 }
 
 //other functions
@@ -162,16 +178,16 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 	var regionContainer = [];
 	console.log("The query is " + query);
 
-	
 	var newRegion = convertToNewReg(query);
 
 	if (typeof query === 'object') {
 		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + state.newRegions['lensemble']['lensemble'] 
-		+ "/initiatives_lensemble.json";
+		+ "/initiatives_all.json";
 
 		for (var region in query) {
 			regionContainer.push(region);
 		}
+
 		regionContainer.push(newUrl);
 		console.log(regionContainer);
 
@@ -183,9 +199,7 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 
 	console.log(newUrl);
 
-	return newUrl;
-
-	
+	return newUrl;	
 }
 
 //processing functions
