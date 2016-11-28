@@ -1,16 +1,7 @@
 /* GENERAL STYLES */
 
-html {
-	box-sizing: border-box;
-}
-
-*,
-*::before,
-*::after {
-	box-sizing: inherit;
-}
-
 h1,
+h3,
 p {
 	text-align: center;
 }
@@ -22,7 +13,6 @@ p {
 .search-btn {
 	margin: 10px 0;
 }
-
 
 
 /* MAP BOX STYLES */
@@ -39,13 +29,21 @@ p {
 	margin-right: auto;
 }
 
+/* CHECKBOX STYLES */
 
+.checkbox-container {
+	padding-top: 100px;
+}
 
 /* MEDIA QUERIES */
 
 @media screen and (min-width: 1000px) {
 	.search-btn {
 		margin: 0;
+	}
+
+	.checkbox-container {
+		padding-top: 50px;
 	}
 
 	.checkboxes {
