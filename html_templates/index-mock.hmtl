@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>Mockup | Initiative Visionneuse</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link href="../styles/main.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<header>
+		<div class="container">
+			<h1>Some awesome title here</h1>
+			<p>Instructions here</p>
+		</div>
+	</header>
+
+	<main>
+		<div class="container">
+			<section class="search-box">
+				<form class="form-like search-form js-search-form">
+					<div class="form-group search-group js-search-group">
+						<label for="search-term" class="sr-only">Search Box</label>
+						<div class="col-xs-12 col-md-10">
+							<input type="text" class="form-control" id="search-term" placeholder="Search Region" />
+						</div>
+					</div>
+					<div class="form-group js-search-form-group">
+						<div class="col-xs-2">
+							<button class="btn btn-default search-btn js-search-btn" type="submit">Search</button>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="checkbox-inline checkboxes">
+							<label for="inline-check-1" class="col-xs-6 col-sm-4 col-md-4">
+								<input type="checkbox" id="inline-check-1" value="option1" />
+								Biodiversité
+							</label>
+							<label for="inline-check-2" class="col-xs-6 col-sm-4 col-md-4">
+								<input type="checkbox" id="inline-check-2" value="option2" />
+								Changement climatique
+							</label>
+							<label for="inline-check-3" class="col-xs-6 col-sm-4 col-md-4">
+								<input type="checkbox" id="inline-check-3" value="option3">
+								Déchets
+							</label>
+							<label for="inline-check-4" class="col-xs-6 col-sm-4 col-md-4">
+								<input type="checkbox" id="inline-check-4" value="option4" />
+								Energies renouvelables
+							</label>
+							<label for="inline-check-5" class="col-xs-6 col-sm-4 col-md-4">
+								<input type="checkbox" id="inline-check-5" value="option5" />
+								Mobilité et transports durables
+							</label>
+							<label for="inline-check-6" class="col-xs-6 col-sm-4 col-md-4">
+								<input type="checkbox" id="inline-check-6" value="option6" />
+								Rénovation énergétique
+							</label>
+							<label for="inline-check-7" class="col-xs-6 col-sm-4 col-md-4">
+								<input type="checkbox" id="inline-check-7" value="option7" />
+								Santé
+							</label>
+						</div>
+					</div>
+				</form>
+			</section>
+			<section class="map">
+				<div class="map-box">
+					<p>MAP</p>
+					<!-- map goes here -->
+				</div>
+			</section>
+			<section class="results">
+				<div class="result-container js-result-container">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							Du déchet à l'innovation sociale créative et positive
+						</div>
+						<div class="panel-body">
+							<img src="http://www.votreenergiepourlafrance.fr/medias/patterns/dechets/large.jpg" class="img-responsive" />
+							<p>Pourquoi continuer à détruire des objets ayant une valeur d’usage, alors que d’autres en ont l’utilité ? \r\nComment passer à une économie solidaire et soutenable de la réutilisation et du réemploi à partir de ces rebuts ? \r\nQuelles innovations sociales penser pour répondre à ces impératifs ? Comment les déchets des uns peuvent-ils faire le bonheur ou l’emploi des autres ? \r\n\r\nLa recyclerie créative de Bordeaux Métropole, portée par l’association ATELIER D’éco SOLIDAIRE à travers un centre ressource créé depuis 5 ans, travail pour répondre à ces problématiques. \r\nElle est depuis 2010, un des leviers de l’innovation sociale et de la transition écologique par la réutilisation de matières, objets et mobilier dont les usagers ou entreprises veulent se débarrasser.\r\nPar le travail croisé de salariés, de designers en résidence, de bénévoles de tous âges ou de stagiaires de tous horizons, la Recyclerie créative alimente une solide réflexion et prône un retour au « bon sens ». \r\nElle est à la fois un centre de récupération, de valorisation, de revente et d’éducation à l’environnement. Elle participe à une dynamique locale de création d’emplois, facilitant l’essor des métiers de l’artisanat, partageant les projets artistiques ou citoyens, faisant collaborer harmonieusement des femmes et des hommes de 17 à 77 ans, dans une ambition positivement soutenable…\r\n90 tonnes de déchets collectées par an, plus de 70 tonnes trouvent une seconde vie. 58 000 visites sur 1 sites/an\r\n1,5 millions d’audience média. Plus de 30 000 heures de travail annuel produites par 11 salariés, 2 designers en résidence, 25 bénévoles, plus des stagiaires de différentes formations.\r\nPour info…\r\n12 tonnes de déchets réutilisés = 1 emploi\r\nDans le recyclage c’est 1 000 tonnes = 1 emploi\r\nPour l’incinération/enfouissement c’est 10 000 tonnes = 1 emploi</p>
+						</div>
+						<ul class="list-group">
+							<li class="list-group-item">
+								<p>Theme: Déchets</p>
+							</li>
+							<li class="list-group-item">
+								<p>Region: Nouvelle-Aquitaine</p>
+							</li>
+							<li class="list-group-item">
+								<p>Department: Gironde</p>
+							</li>
+							<li class="list-group-item">
+								<p><a href="http://www.votreenergiepourlafrance.fr/du-dechet-a-linnovation-sociale-creative-et-positive-124/">Link to Source</a></p>
+							</li>
+						</ul>
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							Du déchet à l'innovation sociale créative et positive
+						</div>
+						<div class="panel-body">
+							<img src="http://www.votreenergiepourlafrance.fr/medias/patterns/dechets/large.jpg" class="img-responsive" />
+							<p>Pourquoi continuer à détruire des objets ayant une valeur d’usage, alors que d’autres en ont l’utilité ? \r\nComment passer à une économie solidaire et soutenable de la réutilisation et du réemploi à partir de ces rebuts ? \r\nQuelles innovations sociales penser pour répondre à ces impératifs ? Comment les déchets des uns peuvent-ils faire le bonheur ou l’emploi des autres ? \r\n\r\nLa recyclerie créative de Bordeaux Métropole, portée par l’association ATELIER D’éco SOLIDAIRE à travers un centre ressource créé depuis 5 ans, travail pour répondre à ces problématiques. \r\nElle est depuis 2010, un des leviers de l’innovation sociale et de la transition écologique par la réutilisation de matières, objets et mobilier dont les usagers ou entreprises veulent se débarrasser.\r\nPar le travail croisé de salariés, de designers en résidence, de bénévoles de tous âges ou de stagiaires de tous horizons, la Recyclerie créative alimente une solide réflexion et prône un retour au « bon sens ». \r\nElle est à la fois un centre de récupération, de valorisation, de revente et d’éducation à l’environnement. Elle participe à une dynamique locale de création d’emplois, facilitant l’essor des métiers de l’artisanat, partageant les projets artistiques ou citoyens, faisant collaborer harmonieusement des femmes et des hommes de 17 à 77 ans, dans une ambition positivement soutenable…\r\n90 tonnes de déchets collectées par an, plus de 70 tonnes trouvent une seconde vie. 58 000 visites sur 1 sites/an\r\n1,5 millions d’audience média. Plus de 30 000 heures de travail annuel produites par 11 salariés, 2 designers en résidence, 25 bénévoles, plus des stagiaires de différentes formations.\r\nPour info…\r\n12 tonnes de déchets réutilisés = 1 emploi\r\nDans le recyclage c’est 1 000 tonnes = 1 emploi\r\nPour l’incinération/enfouissement c’est 10 000 tonnes = 1 emploi</p>
+						</div>
+						<ul class=>
+							<li>
+								<p>Theme: Déchets</p>
+							</li>
+							<li>
+								<p>Region: Nouvelle-Aquitaine</p>
+							</li>
+							<li>
+								<p>Department: Gironde</p>
+							</li>
+							<li>
+								<p><a href="http://www.votreenergiepourlafrance.fr/du-dechet-a-linnovation-sociale-creative-et-positive-124/">Link to Source</a></p>
+							</li>
+						</ul>
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							Du déchet à l'innovation sociale créative et positive
+						</div>
+						<div class="panel-body">
+							<img src="http://www.votreenergiepourlafrance.fr/medias/patterns/dechets/large.jpg"  class="img-responsive" />
+							<p>Pourquoi continuer à détruire des objets ayant une valeur d’usage, alors que d’autres en ont l’utilité ? \r\nComment passer à une économie solidaire et soutenable de la réutilisation et du réemploi à partir de ces rebuts ? \r\nQuelles innovations sociales penser pour répondre à ces impératifs ? Comment les déchets des uns peuvent-ils faire le bonheur ou l’emploi des autres ? \r\n\r\nLa recyclerie créative de Bordeaux Métropole, portée par l’association ATELIER D’éco SOLIDAIRE à travers un centre ressource créé depuis 5 ans, travail pour répondre à ces problématiques. \r\nElle est depuis 2010, un des leviers de l’innovation sociale et de la transition écologique par la réutilisation de matières, objets et mobilier dont les usagers ou entreprises veulent se débarrasser.\r\nPar le travail croisé de salariés, de designers en résidence, de bénévoles de tous âges ou de stagiaires de tous horizons, la Recyclerie créative alimente une solide réflexion et prône un retour au « bon sens ». \r\nElle est à la fois un centre de récupération, de valorisation, de revente et d’éducation à l’environnement. Elle participe à une dynamique locale de création d’emplois, facilitant l’essor des métiers de l’artisanat, partageant les projets artistiques ou citoyens, faisant collaborer harmonieusement des femmes et des hommes de 17 à 77 ans, dans une ambition positivement soutenable…\r\n90 tonnes de déchets collectées par an, plus de 70 tonnes trouvent une seconde vie. 58 000 visites sur 1 sites/an\r\n1,5 millions d’audience média. Plus de 30 000 heures de travail annuel produites par 11 salariés, 2 designers en résidence, 25 bénévoles, plus des stagiaires de différentes formations.\r\nPour info…\r\n12 tonnes de déchets réutilisés = 1 emploi\r\nDans le recyclage c’est 1 000 tonnes = 1 emploi\r\nPour l’incinération/enfouissement c’est 10 000 tonnes = 1 emploi</p>
+						</div>
+						<ul class="list-group">
+							<li class="list-group-item">
+								<p>Theme: Déchets</p>
+							</li>
+							<li class="list-group-item">
+								<p>Region: Nouvelle-Aquitaine</p>
+							</li>
+							<li class="list-group-item">
+								<p>Department: Gironde</p>
+							</li>
+							<li class="list-group-item">
+								<p><a href="http://www.votreenergiepourlafrance.fr/du-dechet-a-linnovation-sociale-creative-et-positive-124/">Link to Source</a></p>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+		</div>
+	</main>
+
+	<!-- SCRIPTS -->
+	<!-- Libraries -->
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<!-- Custom scripts -->
+	<script src="scripts/app.js" type="text/javascript"></script>
+</body>
+</html>
