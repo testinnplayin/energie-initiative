@@ -117,7 +117,7 @@ function renderState(currentState, data) {
 		if (lng > 0) {
 
 			for (var i = 0; i <= numOfResults; i++) {
-				result += "<div class=\"panel panel-default js-panel\""
+				result += "<div class=\"panel panel-default js-panel\">"
 							+ "<div class=\"panel-heading\">"
 								+ data.initiatives[i].title
 							+ "</div>"
@@ -125,7 +125,7 @@ function renderState(currentState, data) {
 								+ "<img src=\"http://www.votreenergiepourlafrance.fr/medias/patterns/" + processQuery(data.initiatives[i].theme) + "/large.jpg\" class=\"img-responsive\" />"
 								+ "<p>" + processBody(data.initiatives[i].body) + "&hellip;</p>"
 							+ "</div>"
-							+ "<ul>"
+							+ "<ul class=\"info-list\">"
 								+ "<li>"
 									+ "<p>Theme: " + data.initiatives[i].theme + "</p>"
 								+ "</li>"
@@ -308,17 +308,14 @@ function stripAccent(processedQ) {
 				default:
 					noAccentQ = processedQ;	
 		}
-		
 	}
 	return noAccentQ;
 }
 
 function processQuery(query) {
-	var processedQ = query.toLowerCase().replace("'", "").replace(/ /g, '-'); //"île-de-france"
-	console.log(processedQ);
-
-	var strippedQ = stripAccent(processedQ); //ile-de-france
-	console.log("stripped " + strippedQ);
+	var processedQ = query.toLowerCase().replace("'", "").replace(/ /g, '-'), //"île-de-france"
+		strippedQ = stripAccent(processedQ); //ile-de-france
+	
 	return strippedQ;
 }
 
