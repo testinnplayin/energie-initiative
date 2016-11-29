@@ -117,13 +117,13 @@ function renderState(currentState, data) {
 		if (lng > 0) {
 
 			for (var i = 0; i <= numOfResults; i++) {
-				result += "<div class=\"panel panel-default js-panel\">"
+				result += "<div class=\"col-xs-12 col-md-6 col-lg-4 result-box\">"
+					+ "<div class=\"panel panel-default js-panel\">"
 							+ "<div class=\"panel-heading\">"
 								+ data.initiatives[i].title
 							+ "</div>"
 							+ "<div class=\"panel-body\">"
 								+ "<img src=\"http://www.votreenergiepourlafrance.fr/medias/patterns/" + processQuery(data.initiatives[i].theme) + "/large.jpg\" class=\"img-responsive\" />"
-								+ "<p>" + processBody(data.initiatives[i].body) + "&hellip;</p>"
 							+ "</div>"
 							+ "<ul class=\"info-list\">"
 								+ "<li>"
@@ -139,9 +139,12 @@ function renderState(currentState, data) {
 									+ "<p><a href=\"" + data.initiatives[i].url + "\" target=\"_blank\">Link to Source</a></p>"
 								+ "</li>"
 							+ "</ul>"
+						+ "</div>"
 					+ "</div>";
 			}
 		}
+
+		
 
 		$('.js-result-container').html(result);
 	}
@@ -269,13 +272,6 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 
 
 //processing functions
-
-function processBody(body) {
-	body.replace(/(<i.*e>)/gi, 'Article original contient lien vers vidéo YouTube');
-	var newBody = body.substring(0, 200);
-
-	return newBody;
-}
 
 function stripAccent(processedQ) {
 	var noAccentQ = "";

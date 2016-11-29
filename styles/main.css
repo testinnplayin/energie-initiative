@@ -63,6 +63,12 @@ p {
 	.map-box {
 		height: 450px;
 	}
+
+	.result-box,
+	.panel {
+		height: 400px;
+		margin: 10px auto;
+	}
 }
 
 @media screen and (min-width: 1500px) {
