@@ -109,38 +109,37 @@ var regionLibrary = {
 function renderState(currentState, data) {
 	if (currentState === "results") {
 		var result = '',
-		numOfResults = 10,
-		lng = data.count;
+			numOfResults = 10,
+			lng = data.count;
 
 		$('.js-result-container').find('.panel').remove();
 
 		if (lng > 0) {
+
 			for (var i = 0; i <= numOfResults; i++) {
-				result += (
-					+ "<div class=\"panel panel-default js-panel\""
-						+ "<div class=\"panel-heading\">"
-							+ data.initiatives[i].title
-						+ "</div>"
-						+ "<div class=\"panel-body\">"
-							+ "<img src=\"http://www.votreenergiepourlafrance.fr/medias/patterns/" + data.initiatives[i].theme + "/large.jpg\" class=\"img-responsive\" />"
-							+ "<p>" + data.initiatives[i].body + "</p>"
-						+ "</div>"
-						+ "<ul>"
-							+ "<li>"
-								+ "<p>Theme: " + data.initiatives[i].theme + "</p>"
-							+ "</li>"
-							+ "<li>"
-								+ "<p>Old region: " + data.initiatives[i].location.region + "</p>"
-							+ "</li>"
-							+ "<li>"
-								+ "<p>Department: " + data.initiatives[i].location.department  + "</p>"
-							+ "</li>"
-							+ "<li>"
-								+ "<p><a href=\"" + data.initiatives[i].url + "\">Link to Source</a></p>"
-							+ "</li>"
-						+ "</ul>"
-					+ "</div>"
-					);
+				result += "<div class=\"panel panel-default js-panel\""
+							+ "<div class=\"panel-heading\">"
+								+ data.initiatives[i].title
+							+ "</div>"
+							+ "<div class=\"panel-body\">"
+								+ "<img src=\"http://www.votreenergiepourlafrance.fr/medias/patterns/" + processQuery(data.initiatives[i].theme) + "/large.jpg\" class=\"img-responsive\" />"
+								+ "<p>" + processBody(data.initiatives[i].body) + "&hellip;</p>"
+							+ "</div>"
+							+ "<ul>"
+								+ "<li>"
+									+ "<p>Theme: " + data.initiatives[i].theme + "</p>"
+								+ "</li>"
+								+ "<li>"
+									+ "<p>Old region: " + data.initiatives[i].location.region + "</p>"
+								+ "</li>"
+								+ "<li>"
+									+ "<p>Department: " + data.initiatives[i].location.department  + "</p>"
+								+ "</li>"
+								+ "<li>"
+									+ "<p><a href=\"" + data.initiatives[i].url + "\" target=\"_blank\">Link to Source</a></p>"
+								+ "</li>"
+							+ "</ul>"
+					+ "</div>";
 			}
 		}
 
@@ -164,6 +163,11 @@ function getData(addressCont) {
 
 	$.ajax(address)
 	.done(function(data) {
+		var currentState = state.currentView,
+			status = checkState(currentState);
+
+		renderState(status, data);
+
 		console.log('successful call');
 		console.log(data);
 		return data;
@@ -262,7 +266,16 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 	return newUrl;	
 }
 
+
+
 //processing functions
+
+function processBody(body) {
+	body.replace(/(<i.*e>)/gi, 'Article original contient lien vers vidéo YouTube');
+	var newBody = body.substring(0, 200);
+
+	return newBody;
+}
 
 function stripAccent(processedQ) {
 	var noAccentQ = "";
@@ -295,8 +308,8 @@ function stripAccent(processedQ) {
 				default:
 					noAccentQ = processedQ;	
 		}
+		
 	}
-	
 	return noAccentQ;
 }
 
@@ -305,7 +318,7 @@ function processQuery(query) {
 	console.log(processedQ);
 
 	var strippedQ = stripAccent(processedQ); //ile-de-france
-
+	console.log("stripped " + strippedQ);
 	return strippedQ;
 }
 
@@ -313,9 +326,6 @@ function processQuery(query) {
 
 function handleActions(e) {
 	e.preventDefault();
-	var currentState = state.currentView,
-		status = checkState(currentState);
-		console.log("current state is " + status);
 
 	var query = $('input[type="text"]').val(),
 		newQuery = checkQuery(query),	
@@ -323,16 +333,11 @@ function handleActions(e) {
 		data = getData(newUrlCont);
 	console.log("Title of story is " + data);
 	
-	renderState(status, data);
 }
 
 function handleSubmit() {
-	var currentState = state.currentView; //'initial'
-
 	$('.js-search-btn').click(function(e) {
-		handleActions(e),
-		console.log(status);
-		console.log(data);
+		handleActions(e);
 	});
 
 	
@@ -341,9 +346,7 @@ function handleSubmit() {
 		var enterKey = 13;
 
 		if (e.which === enterKey) {
-			var data = handleActions(e),
-				status = checkState(currentState);
-			console.log(status);
+			handleActions(e);
 		}
 	});
 }
