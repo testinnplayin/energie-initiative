@@ -106,6 +106,21 @@ var regionLibrary = {
 
 //display functions
 
+AmCharts.makeChart("mapdiv", {
+	"type" : "map",
+	"theme" : "light",
+	"dataProvider" : {
+		"map" : "france2016Low",
+		"getAreasFromMap" : true
+	},
+	"areaSettings" : {
+		"autoZoom" : false,
+		"selectedColor" : "#0000CC",
+		"selectable" : true
+	}
+
+});
+
 function displayResult(obj) {
 	var result = '';
 
