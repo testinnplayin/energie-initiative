@@ -106,47 +106,64 @@ var regionLibrary = {
 
 //display functions
 
-function renderState(currentState, data) {
+function displayResult(obj) {
+	var result = '';
+
+	result += "<div class=\"col-xs-12 col-md-6 col-lg-4 result-box\">"
+		+ "<div class=\"panel panel-default js-panel\">"
+				+ "<div class=\"panel-heading\">"
+					+ obj.title //data[i][i-1].title
+				+ "</div>"
+				+ "<div class=\"panel-body\">"
+					+ "<img src=\"http://www.votreenergiepourlafrance.fr/medias/patterns/" + processQuery(obj.theme) + "/large.jpg\" class=\"img-responsive\" />" //data[i][i-1].theme
+				+ "</div>"
+				+ "<ul class=\"info-list\">"
+					+ "<li>"
+						+ "<p>Theme: " + obj.theme + "</p>" //data[i][i-1].theme
+					+ "</li>"
+					+ "<li>"
+						+ "<p>Old region: " + convertToNewReg(obj.region) + "</p>" //Note: Can prettify this later on if feel need; data[i][i-1].location.region
+					+ "</li>"
+					+ "<li>"
+						+ "<p>Department: " + obj.department + "</p>"//data[i-1][i].location.department
+					+ "</li>"
+					+ "<li>"
+						+ "<p><a href=\"" + obj.url + "\" target=\"_blank\">Link to Source</a></p>"//data[i][i-1].url
+					+ "</li>"
+				+ "</ul>"
+		+ "</div>"
+	+ "</div>";
+
+	return result;
+}
+
+function renderState(currentState, data, addressCont) {
 	if (currentState === "results") {
-		var result = '',
-			numOfResults = 10,
-			lng = data.count;
-
 		$('.js-result-container').find('.panel').remove();
+		console.log(addressCont);
 
-		if (lng > 0) {
+		var result;
 
-			for (var i = 0; i <= numOfResults; i++) {
-				result += "<div class=\"col-xs-12 col-md-6 col-lg-4 result-box\">"
-					+ "<div class=\"panel panel-default js-panel\">"
-							+ "<div class=\"panel-heading\">"
-								+ data.initiatives[i].title
-							+ "</div>"
-							+ "<div class=\"panel-body\">"
-								+ "<img src=\"http://www.votreenergiepourlafrance.fr/medias/patterns/" + processQuery(data.initiatives[i].theme) + "/large.jpg\" class=\"img-responsive\" />"
-							+ "</div>"
-							+ "<ul class=\"info-list\">"
-								+ "<li>"
-									+ "<p>Theme: " + data.initiatives[i].theme + "</p>"
-								+ "</li>"
-								+ "<li>"
-									+ "<p>Old region: " + data.initiatives[i].location.region + "</p>"
-								+ "</li>"
-								+ "<li>"
-									+ "<p>Department: " + data.initiatives[i].location.department  + "</p>"
-								+ "</li>"
-								+ "<li>"
-									+ "<p><a href=\"" + data.initiatives[i].url + "\" target=\"_blank\">Link to Source</a></p>"
-								+ "</li>"
-							+ "</ul>"
-						+ "</div>"
-					+ "</div>";
+		if (Array.isArray(addressCont)) {
+			var lng = data.length;
+
+			console.log("second array branch triggered");
+
+			if (lng > 0) {
+				result = searchData(addressCont, data);
 			}
+
+			$('.js-result-container').html(result);
+		} else {
+			var lng = data.initiatives.length;
+
+			if (lng > 0) {
+				result = buildDataObj(data);	
+			}
+
+			$('.js-result-container').html(result);
 		}
 
-		
-
-		$('.js-result-container').html(result);
 	}
 }
 
@@ -154,14 +171,16 @@ function renderState(currentState, data) {
 
 //ajax call functions
 
-function getData(addressCont) {
+function getData(addressCont, newQuery) {
 	var address;
 
 	if (Array.isArray(addressCont)) {
 		address = addressCont.pop();
 		console.log("address from array " + address);
+		console.log(addressCont);
 	} else {
 		address = addressCont;
+
 	}
 
 	$.ajax(address)
@@ -169,7 +188,12 @@ function getData(addressCont) {
 		var currentState = state.currentView,
 			status = checkState(currentState);
 
-		renderState(status, data);
+		if (Array.isArray(addressCont)) {
+			console.log("array branch triggered");
+			renderState(status, data, addressCont);
+		} else {
+			renderState(status, data, newQuery);
+		}
 
 		console.log('successful call');
 		console.log(data);
@@ -258,7 +282,7 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 		regionContainer.push(newUrl);
 		console.log(regionContainer);
 
-		return regionContainer;
+		return regionContainer; //"nouvelle-aquitaine" becomes ["aquitaine", "limousin", "poitou-charentes", "https://www.data.gouv.fr....."]
 	}
 
 	var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + regionLibrary.newRegions[newRegion][query] + "/initiatives_" 
@@ -272,6 +296,51 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 
 
 //processing functions
+
+function buildDataObj(data) {
+	var numOfResults = 10,
+		result = "";
+
+	for (var i = 0; i < numOfResults; i++) {
+		var obj = {
+			title : data.initiatives[i].title,
+			theme : data.initiatives[i].theme,
+			region : data.initiatives[i].location.region,
+			department : data.initiatives[i].location.department,
+			url: data.initiatives[i].url
+		};
+
+		result += displayResult(obj);
+	}
+	
+	return result;
+}
+
+function searchData(addressCont, data) { //for the file containing all regions put together, all of the data is stored in a large array of objects, not an object containing an array of objects like in ind regions
+	var lng = data.length,
+		result = "";
+
+	console.log("search data triggered");
+	console.log(addressCont);
+	console.log(data);
+
+	for (var region of addressCont) {
+		for (var i = 1; i < lng; i++) {
+			if (region === data[i][i-1].location.region) {
+				var obj = {
+					title : data[i][i-1].title,
+					theme : data[i][i-1].theme,
+					region : data[i][i-1].region,
+					department : data[i][i-1].department,
+					url : data[i][i-1].url
+				}
+				result += displayResult(obj);
+			}
+		}
+	}
+
+	return result;
+}
 
 function stripAccent(processedQ) {
 	var noAccentQ = "";
@@ -323,8 +392,7 @@ function handleActions(e) {
 	var query = $('input[type="text"]').val(),
 		newQuery = checkQuery(query),	
 		newUrlCont = generateEndpoint(newQuery),
-		data = getData(newUrlCont);
-	console.log("Title of story is " + data);
+		data = getData(newUrlCont, newQuery);
 	
 }
 
