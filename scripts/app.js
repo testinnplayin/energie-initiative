@@ -106,7 +106,7 @@ var regionLibrary = {
 
 //display functions
 
-AmCharts.makeChart("mapdiv", {
+var map = AmCharts.makeChart("mapdiv", {
 	"type" : "map",
 	"theme" : "light",
 	"dataProvider" : {
