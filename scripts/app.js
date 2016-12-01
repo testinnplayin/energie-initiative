@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var state = {
 	currentView : 'index',
@@ -23,15 +23,12 @@ var regionLibrary = {
 		"corse" : {
 			"corse" : "161049"
 		},
+		"guyane" : {
+			"guyane" : "160941"
+		},
 		"grand-est" : {
 			"alsace" : "161326",
 			"lorraine" : "160729"
-		},
-		"guadeloupe" : {
-			"guadeloupe" : "161008"
-		},
-		"guyane" : {
-			"guyane" : "160941"
 		},
 		"hauts-de-france" : {
 			"nord-pas-de-calais" : "160629",
@@ -39,15 +36,6 @@ var regionLibrary = {
 		},
 		"ile-de-france" : {
 			"ile-de-france" : "160859"
-		},
-		"la-reunion" : {
-			"la-reunion" : "160815"
-		},
-		"martinique" : {
-			"martinique" : "160711"
-		},
-		"mayotte" : {
-			"mayotte" : "161405"
 		},
 		"normandie" : {
 			"basse-normandie" : "161229",
@@ -82,16 +70,12 @@ var regionLibrary = {
 		"champagne-ardenne" : "grand-est",
 		"corse" : "corse",
 		"franche-comte" : "bourgogne-franche-comte",
-		"guadeloupe" : "guadeloupe",
 		"guyane" : "guyane",
 		"haute-normandie" : "normandie",
 		"ile-de-france" : "ile-de-france",
 		"languedoc-rousillon" : "occitanie",
-		"la-reunion" : "la-reunion",
 		"limousin" : "nouvelle-aquitaine",
 		"lorraine" : "grand-est",
-		"martinique" : "martinique",
-		"mayotte" : "mayotte",
 		"midi-pyrenees" : "occitanie",
 		"nord-pas-de-calais" : "hauts-de-france",
 		"pays-de-la-loire" : "pays-de-la-loire",
@@ -121,29 +105,33 @@ var map = AmCharts.makeChart("mapdiv", {
 
 });
 
+function displayError() {
+	var result = "<p>Aucune initiative n'existe pour cette région</p>";
+}
+
 function displayResult(obj) {
 	var result = '';
 
 	result += "<div class=\"col-xs-12 col-md-6 col-lg-4 result-box\">"
 		+ "<div class=\"panel panel-default js-panel\">"
 				+ "<div class=\"panel-heading\">"
-					+ obj.title //data[i][i-1].title
+					+ obj.title 
 				+ "</div>"
 				+ "<div class=\"panel-body\">"
-					+ "<img src=\"http://www.votreenergiepourlafrance.fr/medias/patterns/" + processQuery(obj.theme) + "/large.jpg\" class=\"img-responsive\" />" //data[i][i-1].theme
+					+ "<img src=\"http://www.votreenergiepourlafrance.fr/medias/patterns/" + processQuery(obj.theme) + "/large.jpg\" class=\"img-responsive\" />" 
 				+ "</div>"
 				+ "<ul class=\"info-list\">"
 					+ "<li>"
-						+ "<p>Theme: " + obj.theme + "</p>" //data[i][i-1].theme
+						+ "<p>Theme: " + obj.theme + "</p>" 
 					+ "</li>"
 					+ "<li>"
 						+ "<p>Old region: " + convertToNewReg(obj.region) + "</p>" //Note: Can prettify this later on if feel need; data[i][i-1].location.region
 					+ "</li>"
 					+ "<li>"
-						+ "<p>Department: " + obj.department + "</p>"//data[i-1][i].location.department
+						+ "<p>Department: " + obj.department + "</p>"
 					+ "</li>"
 					+ "<li>"
-						+ "<p><a href=\"" + obj.url + "\" target=\"_blank\">Link to Source</a></p>"//data[i][i-1].url
+						+ "<p><a href=\"" + obj.url + "\" target=\"_blank\">Link to Source</a></p>"
 					+ "</li>"
 				+ "</ul>"
 		+ "</div>"
@@ -160,12 +148,13 @@ function renderState(currentState, data, addressCont) {
 		var result;
 
 		if (Array.isArray(addressCont)) {
-			var lng = data.length;
-
+			var lng = Object.keys(data[1]).length;
 			console.log("second array branch triggered");
 
 			if (lng > 0) {
 				result = searchData(addressCont, data);
+			} else {
+				result = displayError();
 			}
 
 			$('.js-result-container').html(result);
@@ -174,6 +163,8 @@ function renderState(currentState, data, addressCont) {
 
 			if (lng > 0) {
 				result = buildDataObj(data);	
+			} else {
+				result = displayError();
 			}
 
 			$('.js-result-container').html(result);
@@ -313,10 +304,10 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 //processing functions
 
 function buildDataObj(data) {
-	var numOfResults = 10,
+	var lng = data.count,
 		result = "";
 
-	for (var i = 0; i < numOfResults; i++) {
+	for (var i = 0; i < lng; i++) {
 		var obj = {
 			title : data.initiatives[i].title,
 			theme : data.initiatives[i].theme,
@@ -332,24 +323,24 @@ function buildDataObj(data) {
 }
 
 function searchData(addressCont, data) { //for the file containing all regions put together, all of the data is stored in a large array of objects, not an object containing an array of objects like in ind regions
-	var lng = data.length,
+	var lng = Object.keys(data[1]).length,
 		result = "";
 
 	console.log("search data triggered");
-	console.log(addressCont);
-	console.log(data);
 
 	for (var region of addressCont) {
-		for (var i = 1; i < lng; i++) {
-			if (region === data[i][i-1].location.region) {
+		for (var i = 1; i <= lng; i++) {
+			if (region === data[1][i-1].location.region) {
 				var obj = {
-					title : data[i][i-1].title,
-					theme : data[i][i-1].theme,
-					region : data[i][i-1].region,
-					department : data[i][i-1].department,
-					url : data[i][i-1].url
-				}
+					title : data[1][i-1].title,
+					theme : data[1][i-1].theme,
+					region : data[1][i-1].location.region,
+					department : data[1][i-1].location.department,
+					url : data[1][i-1].url
+				};
+				console.log(obj.title);
 				result += displayResult(obj);
+				console.log(result);
 			}
 		}
 	}
