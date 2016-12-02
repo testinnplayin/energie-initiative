@@ -97,19 +97,19 @@ var regionLibrary = {
 		"rhone-alpes" : "auvergne-rhone-alpes",
 	},
 	mapRegions : {
-		"grand-est" : "FR-A",
-		"nouvelle-aquitaine": "FR-B",
-		"auvergne-rhone-alpes" : "FR-C",
-		"bourgogne-franche-comte" : "FR-D",
-		"bretagne" : "FR-E",
-		"centre-val-de-loire" : "FR-F",
-		"corse" : "FR-G",
-		"ile-de-france" : "FR-H",
-		"occitanie" : "FR-I",
-		"hauts-de-france" : "FR-J",
-		"normandie" : "FR-K",
-		"pays-de-la-loire" : "FR-L",
-		"provence-alpes-cote-dazur" : "FR-M"
+		"FR-A" : "grand-est",
+		"FR-B" : "nouvelle-aquitaine",
+		"FR-C" : "auvergne-rhone-alpes",
+		"FR-D" : "bourgogne-franche-comte",
+		"FR-E" : "bretagne",
+		"FR-F" : "centre-val-de-loire",
+		"FR-G" : "corse",
+		"FR-H" : "ile-de-france",
+		"FR-I" : "occitanie",
+		"FR-J" : "hauts-de-france",
+		"FR-K": "normandie",
+		"FR-L" : "pays-de-la-loire",
+		"FR-M" : "provence-alpes-cote-dazur" 
 	}
 };
 
@@ -345,8 +345,8 @@ function processSelectedRegion(selection) {
 		lng = mapKeys.length;
 
 	for (var i = 0; i < lng; i ++) {
-		if (selection === mapKeys[i]) {
-			var newRegion = regionLibrary.mapRegions[selection];
+		if (selection[0].id === mapKeys[i]) {
+			var newRegion = regionLibrary.mapRegions[selection[0].id];
 
 			return newRegion;
 		}
@@ -354,15 +354,16 @@ function processSelectedRegion(selection) {
 }
 
 function getSelectedRegion(map) {
-	var selected = [],
-		lng = map.dataProvider.areas.length;
+	//var selected = [{id: "FR-H", showAsSelected: true}];
+	console.log("getSelectedRegion triggered");
 
-	for (var i = 0; i < lng; i++) {
-		if (map.dataProvider.areas[i].showAsSelected) {
-			selected.push(map.dataProvider.areas[i].id);
-		}
-		return selected;
+	var selected = [];
+	if (map.dataProvider.areas.showAsSelected) {
+		selected.push({id: map.dataProvider.areas.showAsSelected.id})
 	}
+	console.log(selected);
+	return selected;
+	
 }
 
 function buildDataObj(data) {
@@ -463,10 +464,13 @@ function processQuery(query) {
 function handleActions(e, map) {
 	e.preventDefault();
 
-	var selectedRegion = getSelectedRegion(map);
-	console.log("selectedRegion " + selectedRegion);
 
-	var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val() || processSelectedRegion(selectedRegion),
+	var selectedRegion = getSelectedRegion(map);
+	console.log("selectedRegion " + selectedRegion[0].id);
+	var processedMapRegion = processSelectedRegion(selectedRegion);
+	console.log("processedMapRegion " + processedMapRegion);
+
+	var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val() || processedMapRegion,
 		newQuery = checkQuery(query),	
 		newUrlCont = generateEndpoint(newQuery),
 		data = getData(newUrlCont, newQuery);
