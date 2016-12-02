@@ -23,6 +23,9 @@ var regionLibrary = {
 		"corse" : {
 			"corse" : "161049"
 		},
+		"guadeloupe" : {
+			"guadeloupe" : "161008"
+		},
 		"guyane" : {
 			"guyane" : "160941"
 		},
@@ -36,6 +39,12 @@ var regionLibrary = {
 		},
 		"ile-de-france" : {
 			"ile-de-france" : "160859"
+		},
+		"la-reunion" : {
+			"la-reunion" : "160815"
+		},
+		"martinique" : {
+			"martinique" : "160711"
 		},
 		"normandie" : {
 			"basse-normandie" : "161229",
@@ -70,12 +79,15 @@ var regionLibrary = {
 		"champagne-ardenne" : "grand-est",
 		"corse" : "corse",
 		"franche-comte" : "bourgogne-franche-comte",
+		"guadeloupe" : "guadeloupe",
 		"guyane" : "guyane",
 		"haute-normandie" : "normandie",
 		"ile-de-france" : "ile-de-france",
 		"languedoc-rousillon" : "occitanie",
+		"la-reunion" : "la-reunion",
 		"limousin" : "nouvelle-aquitaine",
 		"lorraine" : "grand-est",
+		"martinique" : "martinique",
 		"midi-pyrenees" : "occitanie",
 		"nord-pas-de-calais" : "hauts-de-france",
 		"pays-de-la-loire" : "pays-de-la-loire",
@@ -102,12 +114,7 @@ var map = AmCharts.makeChart("mapdiv", {
 		"selectedColor" : "#0000CC",
 		"selectable" : true
 	}
-
 });
-
-function displayError() {
-	var result = "<p>Aucune initiative n'existe pour cette région</p>";
-}
 
 function displayResult(obj) {
 	var result = '';
@@ -153,8 +160,6 @@ function renderState(currentState, data, addressCont) {
 
 			if (lng > 0) {
 				result = searchData(addressCont, data);
-			} else {
-				result = displayError();
 			}
 
 			$('.js-result-container').html(result);
@@ -163,8 +168,6 @@ function renderState(currentState, data, addressCont) {
 
 			if (lng > 0) {
 				result = buildDataObj(data);	
-			} else {
-				result = displayError();
 			}
 
 			$('.js-result-container').html(result);
@@ -387,6 +390,11 @@ function processQuery(query) {
 	var processedQ = query.toLowerCase().replace("'", "").replace(/ /g, '-'), //"île-de-france"
 		strippedQ = stripAccent(processedQ); //ile-de-france
 	
+	if (strippedQ === "mobilite-et-transports-durables") {
+		strippedQ = "mobilite-durable";
+		return strippedQ;
+	}
+
 	return strippedQ;
 }
 
@@ -395,12 +403,14 @@ function processQuery(query) {
 function handleActions(e) {
 	e.preventDefault();
 
-	var query = $('input[type="text"]').val(),
+	var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val(),
 		newQuery = checkQuery(query),	
 		newUrlCont = generateEndpoint(newQuery),
 		data = getData(newUrlCont, newQuery);
 	
 }
+
+console.log(query);
 
 function handleSubmit() {
 	$('.js-search-btn').click(function(e) {

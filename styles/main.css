@@ -29,6 +29,11 @@ p {
 	margin-right: auto;
 }
 
+#small-mapdiv {
+	height: 50px;
+	width: 20%;
+}
+
 /* CHECKBOX STYLES */
 
 .checkbox-container {
