@@ -61,8 +61,8 @@ var regionLibrary = {
 		"pays-de-la-loire" : {
 			"pays-de-la-loire" : "160601"
 		},
-		"provence-alpes-cote-dazure" : {
-			"provence-alpes-cote-dazure" : "160434"
+		"provence-alpes-cote-dazur" : {
+			"provence-alpes-cote-dazur" : "160434"
 		},
 		"lensemble" : {
 			"lensemble" : "160312"
@@ -93,7 +93,7 @@ var regionLibrary = {
 		"pays-de-la-loire" : "pays-de-la-loire",
 		"picardie" : "hauts-de-france",
 		"poitou-charentes" : "nouvelle-aquitaine",
-		"provence-alpes-cote-dazure" : "provence-alpes-cote-dazure",
+		"provence-alpes-cote-dazur" : "provence-alpes-cote-dazur",
 		"rhone-alpes" : "auvergne-rhone-alpes",
 	},
 };
@@ -407,10 +407,8 @@ function handleActions(e) {
 		newQuery = checkQuery(query),	
 		newUrlCont = generateEndpoint(newQuery),
 		data = getData(newUrlCont, newQuery);
-	
+	console.log(query);
 }
-
-console.log(query);
 
 function handleSubmit() {
 	$('.js-search-btn').click(function(e) {
