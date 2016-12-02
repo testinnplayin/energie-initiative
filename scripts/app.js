@@ -97,19 +97,19 @@ var regionLibrary = {
 		"rhone-alpes" : "auvergne-rhone-alpes",
 	},
 	mapRegions : {
-		"FR-A" : "grand-est",
-		"FR-B" : "nouvelle-aquitaine",
-		"FR-C" : "auvergne-rhone-alpes",
-		"FR-D" : "bourgogne-franche-comte",
-		"FR-E" : "bretagne",
-		"FR-F" : "centre-val-de-loire",
-		"FR-G" : "corse",
-		"FR-H" : "ile-de-france",
-		"FR-I" : "occitanie",
-		"FR-J" : "hauts-de-france",
-		"FR-K" : "normandie",
-		"FR-L" : "pays-de-la-loire",
-		"FR-M" : "provence-alpes-cote-dazur",
+		"grand-est" : "FR-A",
+		"nouvelle-aquitaine": "FR-B",
+		"auvergne-rhone-alpes" : "FR-C",
+		"bourgogne-franche-comte" : "FR-D",
+		"bretagne" : "FR-E",
+		"centre-val-de-loire" : "FR-F",
+		"corse" : "FR-G",
+		"ile-de-france" : "FR-H",
+		"occitanie" : "FR-I",
+		"hauts-de-france" : "FR-J",
+		"normandie" : "FR-K",
+		"pays-de-la-loire" : "FR-L",
+		"provence-alpes-cote-dazur" : "FR-M"
 	}
 };
 
@@ -128,10 +128,25 @@ function drawInitialMap() {
 		},
 		"areaSettings" : {
 			"autoZoom" : false,
-			"selectedColor" : "#0000CC",
+			"selectedColor" : "#00CCCC",
 			"selectable" : true
-		}
+		},
+		"listeners" : [{
+			"event" : "clickMapObject",
+			"method" : function(e) {
+				if (e.mapObject.objectType !== "MapArea") {
+					return;
+				}
+
+				var area = e.mapObject;
+
+				area.showAsSelected = !area.showAsSelected;
+				e.chart.returnInitialColor(area);
+			}
+		}]
 	});
+
+	return map;
 }
 
 function displayResult(obj) {
@@ -324,6 +339,18 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 
 //processing functions
 
+function getSelectedRegion(map) {
+	var selected = [],
+		lng = map.dataProvider.areas.length;
+
+	for (var i = 0; i < lng; i++) {
+		if (map.dataProvider.areas[i].showAsSelected) {
+			selected.push(map.dataProvider.areas[i].id);
+		}
+		return selected;
+	}
+}
+
 function buildDataObj(data) {
 	var lng = data.count,
 		result = "";
@@ -418,18 +445,19 @@ function processQuery(query) {
 
 //event handler functions
 
-function handleActions(e) {
+
+function handleActions(e, map) {
 	e.preventDefault();
 
-	var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val(),
+	var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val() || getSelectedRegion(map),
 		newQuery = checkQuery(query),	
 		newUrlCont = generateEndpoint(newQuery),
 		data = getData(newUrlCont, newQuery);
 }
 
-function handleSubmit() {
+function handleSubmit(map) {
 	$('.js-search-btn').click(function(e) {
-		handleActions(e);
+		handleActions(e, map);
 	});
 
 	
@@ -438,15 +466,15 @@ function handleSubmit() {
 		var enterKey = 13;
 
 		if (e.which === enterKey) {
-			handleActions(e);
+			handleActions(e, map);
 		}
 	});
 }
 
 function handleInitialState() {
-	drawInitialMap();
+	var map = drawInitialMap();
 
-	handleSubmit();
+	handleSubmit(map);
 }
 
 $(document).ready(handleInitialState);
