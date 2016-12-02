@@ -124,9 +124,10 @@ function drawInitialMap() {
 		"theme" : "light",
 		"dataProvider" : {
 			"map" : "france2016Low",
-			"getAreasFromMap" : true
+			"getAreasFromMap" : true,
+			"areas" : []
 		},
-		"areaSettings" : {
+		"areasSettings" : {
 			"autoZoom" : false,
 			"selectedColor" : "#00CCCC",
 			"selectable" : true
@@ -339,6 +340,19 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 
 //processing functions
 
+function processSelectedRegion(selection) {
+	var mapKeys = Object.keys(regionLibrary.mapRegions),
+		lng = mapKeys.length;
+
+	for (var i = 0; i < lng; i ++) {
+		if (selection === mapKeys[i]) {
+			var newRegion = regionLibrary.mapRegions[selection];
+
+			return newRegion;
+		}
+	}
+}
+
 function getSelectedRegion(map) {
 	var selected = [],
 		lng = map.dataProvider.areas.length;
@@ -449,7 +463,10 @@ function processQuery(query) {
 function handleActions(e, map) {
 	e.preventDefault();
 
-	var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val() || getSelectedRegion(map),
+	var selectedRegion = getSelectedRegion(map);
+	console.log("selectedRegion " + selectedRegion);
+
+	var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val() || processSelectedRegion(selectedRegion),
 		newQuery = checkQuery(query),	
 		newUrlCont = generateEndpoint(newQuery),
 		data = getData(newUrlCont, newQuery);
