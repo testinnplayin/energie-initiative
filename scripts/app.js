@@ -96,25 +96,43 @@ var regionLibrary = {
 		"provence-alpes-cote-dazur" : "provence-alpes-cote-dazur",
 		"rhone-alpes" : "auvergne-rhone-alpes",
 	},
+	mapRegions : {
+		"FR-A" : "grand-est",
+		"FR-B" : "nouvelle-aquitaine",
+		"FR-C" : "auvergne-rhone-alpes",
+		"FR-D" : "bourgogne-franche-comte",
+		"FR-E" : "bretagne",
+		"FR-F" : "centre-val-de-loire",
+		"FR-G" : "corse",
+		"FR-H" : "ile-de-france",
+		"FR-I" : "occitanie",
+		"FR-J" : "hauts-de-france",
+		"FR-K" : "normandie",
+		"FR-L" : "pays-de-la-loire",
+		"FR-M" : "provence-alpes-cote-dazur",
+	}
 };
 
 
 
 //display functions
 
-var map = AmCharts.makeChart("mapdiv", {
-	"type" : "map",
-	"theme" : "light",
-	"dataProvider" : {
-		"map" : "france2016Low",
-		"getAreasFromMap" : true
-	},
-	"areaSettings" : {
-		"autoZoom" : false,
-		"selectedColor" : "#0000CC",
-		"selectable" : true
-	}
-});
+function drawInitialMap() {
+
+	var map = AmCharts.makeChart("mapdiv", {
+		"type" : "map",
+		"theme" : "light",
+		"dataProvider" : {
+			"map" : "france2016Low",
+			"getAreasFromMap" : true
+		},
+		"areaSettings" : {
+			"autoZoom" : false,
+			"selectedColor" : "#0000CC",
+			"selectable" : true
+		}
+	});
+}
 
 function displayResult(obj) {
 	var result = '';
@@ -407,7 +425,6 @@ function handleActions(e) {
 		newQuery = checkQuery(query),	
 		newUrlCont = generateEndpoint(newQuery),
 		data = getData(newUrlCont, newQuery);
-	console.log(query);
 }
 
 function handleSubmit() {
@@ -426,4 +443,10 @@ function handleSubmit() {
 	});
 }
 
-$(document).ready(handleSubmit);
+function handleInitialState() {
+	drawInitialMap();
+
+	handleSubmit();
+}
+
+$(document).ready(handleInitialState);
