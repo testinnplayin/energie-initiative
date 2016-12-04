@@ -107,7 +107,7 @@ var regionLibrary = {
 		"FR-H" : "ile-de-france",
 		"FR-I" : "occitanie",
 		"FR-J" : "hauts-de-france",
-		"FR-K": "normandie",
+		"FR-K" : "normandie",
 		"FR-L" : "pays-de-la-loire",
 		"FR-M" : "provence-alpes-cote-dazur" 
 	}
@@ -150,23 +150,38 @@ function drawInitialMap() {
 	return map;
 }
 
+
 function drawResultsMap(data) {
-	var map = AmCharts.makeChart("mapdiv", {
+	var newMap = AmCharts.makeChart("mapdiv", {
 		"type" : "map",
 		"theme" : "light",
 		"dataProvider" : {
 			"map" : "france2016Low",
 			"getAreasFromMap" : true,
-			"areas" : []
-		},
-		"areasSettings" : {
-			"autoZoom" : true,
-			"selectedColor" : "#00CCCC",
-			"selectable" : true
 		}
 	});
 
+	newMap.areasSettings = {
+		unlistedAreas: "#CCCCCC",
+		rollOverOutlineColor: "#888888",
+		rollOverColor: "#00CCCC"
+	};
 
+	newMap.write("mapdiv");
+}
+
+function drawChart(chartData, newRegion) {
+	//var mapId = convertToMapId(newRegion);
+	var chart = new AmCharts.AmPieChart();
+
+	chart.dataProvider = chartData;
+	chart.titleField = "theme";
+	chart.valueField = "frequency";
+	chart.backgroundColor = "#000000";
+	chart.backgroundAlpha = 0.4;
+	chart.addLabel("0", "0", newRegion, "center", 18);
+
+	chart.write("chartdiv");
 }
 
 function displayResult(obj) {
@@ -215,7 +230,6 @@ function renderState(currentState, data, addressCont) {
 			if (lng > 0) {
 				$('#mapdiv').empty();
 				result = searchData(addressCont, data);
-				var newMap = drawResultsMap(data);
 			}
 
 			$('.js-result-container').html(result);
@@ -307,19 +321,6 @@ function checkRegion(region) {
 	return region;
 }
 
-function convertToNewReg(query) {
-	var newRegion = "";
-	console.log("region conversion triggered");
-
-	for (var oldRegion in regionLibrary.oldRegions) {
-		if (query === oldRegion && typeof query !== 'object') {
-			newRegion = regionLibrary.oldRegions[oldRegion];
-			console.log("convertToNewReg " + newRegion);
-			return newRegion;
-		}
-	}
-}
-
 function checkState(currentState) {
 	if (currentState === 'index') {
 		currentState = 'results';
@@ -330,6 +331,34 @@ function checkState(currentState) {
 }
 
 //other functions
+
+
+function calculateThemeFreq(objArr) {
+	var themeFreq = {},
+		themeArray = [],
+		regionArray = [],
+		charData = [];
+
+	for (var obj of objArr) {
+		themeArray.push(obj.theme);
+		regionArray.push(obj.region);
+	}
+
+	console.log(regionArray);
+
+	var newRegion = convertToNewReg(regionArray);
+	console.log("new region from calculateThemeFreq is " + newRegion);
+
+
+	for (var theme of themeArray) {
+		themeFreq["theme"] = theme;
+		themeFreq["frequency"] = (themeFreq[theme] || 0) + 1; 
+		charData.push(themeFreq);
+	}
+
+	var chart = drawChart(charData, newRegion);
+	drawResultsMap(chart);
+}
 
 function generateEndpoint(query) { //for nouvelle-aquitaine we have an object containing three different old regions and their times of addition to the database
 	var regionContainer = [];
@@ -391,6 +420,7 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 
 function buildDataObj(data) {
 	var lng = data.count,
+		objArr = [],
 		result = "";
 
 	for (var i = 0; i < lng; i++) {
@@ -403,8 +433,9 @@ function buildDataObj(data) {
 		};
 
 		result += displayResult(obj);
+		objArr.push(obj);
 	}
-
+	calculateThemeFreq(objArr);
 	return result;
 }
 
@@ -438,6 +469,37 @@ function searchData(addressCont, data) { //for the file containing all regions p
 	}
 
 	return result;
+}
+
+function convertToNewReg(query) {
+	var newRegion = "";
+	console.log("region conversion triggered");
+
+	for (var oldRegion in regionLibrary.oldRegions) {
+		if (query === oldRegion && typeof query !== 'object') {
+			newRegion = regionLibrary.oldRegions[oldRegion];
+			console.log("convertToNewReg " + newRegion);
+			return newRegion;
+		} else if (Array.isArray(query)) {
+			for (var item of query) {
+				if (item === oldRegion) {
+					newRegion = regionLibrary.oldRegions[oldRegion];
+					console.log(newRegion);
+					return newRegion;
+				}
+			}
+		}
+	}
+}
+
+function convertToMapId(newRegion) {
+	console.log("map id conversion triggered");
+	for (var region in regionLibrary.mapRegions) {
+		if (newRegion === regionLibrary.mapRegions[region]) {
+			console.log("region ID is " + region);
+			return region;
+		}
+	}
 }
 
 function stripAccent(processedQ) {

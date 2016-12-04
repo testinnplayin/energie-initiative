@@ -29,9 +29,12 @@ p {
 	margin-right: auto;
 }
 
-#small-mapdiv {
-	height: 50px;
-	width: 20%;
+/* CHART STYLES */
+
+#chartdiv {
+	width: 200px;
+	height: 150px;
+	
 }
 
 /* CHECKBOX STYLES */
