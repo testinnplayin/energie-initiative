@@ -178,8 +178,8 @@ function drawChart(chartData, newRegion) {
 	chart.valueField = "frequency";
 	chart.backgroundColor = "#000000";
 	chart.backgroundAlpha = 0.4;
-	chart.addLabel("0", "0", newRegion, "center", 18);
-
+	chart.addLabel("0", "!20", newRegion, "center", 18);
+	chart.labelsEnabled = false;
 	chart.write("chartdiv");
 }
 
