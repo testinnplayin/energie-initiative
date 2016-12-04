@@ -171,7 +171,6 @@ function drawResultsMap(data) {
 }
 
 function drawChart(chartData, newRegion) {
-	//var mapId = convertToMapId(newRegion);
 	var chart = new AmCharts.AmPieChart();
 
 	chart.dataProvider = chartData;
@@ -337,26 +336,30 @@ function calculateThemeFreq(objArr) {
 	var themeFreq = {},
 		themeArray = [],
 		regionArray = [],
-		charData = [];
+		chartData = [];
 
 	for (var obj of objArr) {
 		themeArray.push(obj.theme);
 		regionArray.push(obj.region);
 	}
 
-	console.log(regionArray);
-
 	var newRegion = convertToNewReg(regionArray);
-	console.log("new region from calculateThemeFreq is " + newRegion);
 
+	themeArray.forEach(function(theme) {
+		themeFreq[theme] = (themeFreq[theme] || 0) + 1;
+	});
 
-	for (var theme of themeArray) {
-		themeFreq["theme"] = theme;
-		themeFreq["frequency"] = (themeFreq[theme] || 0) + 1; 
-		charData.push(themeFreq);
+	console.log(themeFreq);
+
+	for (var theme in themeFreq) {
+		var themeObj = {};
+		themeObj["theme"] = theme;
+		themeObj["frequency"] = themeFreq[theme];
+		console.log(themeObj);
+		chartData.push(themeObj);
+		console.log(chartData);
 	}
-
-	var chart = drawChart(charData, newRegion);
+	var chart = drawChart(chartData, newRegion);
 	drawResultsMap(chart);
 }
 
@@ -488,16 +491,6 @@ function convertToNewReg(query) {
 					return newRegion;
 				}
 			}
-		}
-	}
-}
-
-function convertToMapId(newRegion) {
-	console.log("map id conversion triggered");
-	for (var region in regionLibrary.mapRegions) {
-		if (newRegion === regionLibrary.mapRegions[region]) {
-			console.log("region ID is " + region);
-			return region;
 		}
 	}
 }
