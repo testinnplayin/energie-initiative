@@ -359,23 +359,6 @@ function searchData(addressCont, data) { //for the file containing all regions p
 				}
 			}
 		}
-
-
-		// for (var i = 0; i < lng; i++) {
-		// 	if (region == data[1][i].location.region) {
-		// 		var obj = {
-		// 			title : data[1][i].title,
-		// 			theme : data[1][i].theme,
-		// 			region : data[1][i].location.region,
-		// 			department : data[1][i].location.department,
-		// 			url : data[1][i].url
-		// 		};
-		// 		// console.log(obj.title);
-		// 		result += displayResult(obj);
-		// 		// console.log(result);
-		// 	}
-		// 	// else{ console.log('NOPE'); console.log(data[1][i].location.region); }
-		// }
 	}
 
 	return result;
