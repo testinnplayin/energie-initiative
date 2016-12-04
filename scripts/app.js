@@ -129,25 +129,44 @@ function drawInitialMap() {
 		},
 		"areasSettings" : {
 			"autoZoom" : false,
-			"selectedColor" : "#00CCCC",
-			"selectable" : true
+		//	"selectedColor" : "#00CCCC",
+		//	"selectable" : true
 		},
-		"listeners" : [{
-			"event" : "clickMapObject",
-			"method" : function(e) {
-				if (e.mapObject.objectType !== "MapArea") {
-					return;
-				}
+		// "listeners" : [{
+		// 	"event" : "clickMapObject",
+		// 	"method" : function(e) {
+		// 		if (e.mapObject.objectType !== "MapArea") {
+		// 			return;
+		// 		}
 
-				var area = e.mapObject;
+		// 		var area = e.mapObject;
 
-				area.showAsSelected = !area.showAsSelected;
-				e.chart.returnInitialColor(area);
-			}
-		}]
+		// 		area.showAsSelected = !area.showAsSelected;
+		// 		e.chart.returnInitialColor(area);
+		// 	}
+		// }]
 	});
 
 	return map;
+}
+
+function drawResultsMap(data) {
+	var map = AmCharts.makeChart("mapdiv", {
+		"type" : "map",
+		"theme" : "light",
+		"dataProvider" : {
+			"map" : "france2016Low",
+			"getAreasFromMap" : true,
+			"areas" : []
+		},
+		"areasSettings" : {
+			"autoZoom" : true,
+			"selectedColor" : "#00CCCC",
+			"selectable" : true
+		}
+	});
+
+
 }
 
 function displayResult(obj) {
@@ -184,6 +203,7 @@ function displayResult(obj) {
 function renderState(currentState, data, addressCont) {
 	if (currentState === "results") {
 		$('.js-result-container').find('.panel').remove();
+
 		console.log(addressCont);
 
 		var result;
@@ -193,7 +213,9 @@ function renderState(currentState, data, addressCont) {
 			console.log("second array branch triggered");
 
 			if (lng > 0) {
+				$('#mapdiv').empty();
 				result = searchData(addressCont, data);
+				var newMap = drawResultsMap(data);
 			}
 
 			$('.js-result-container').html(result);
@@ -201,6 +223,7 @@ function renderState(currentState, data, addressCont) {
 			var lng = data.initiatives.length;
 
 			if (lng > 0) {
+				$('#mapdiv').empty();
 				result = buildDataObj(data);
 			}
 
@@ -340,31 +363,31 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 
 //processing functions
 
-function processSelectedRegion(selection) {
-	var mapKeys = Object.keys(regionLibrary.mapRegions),
-		lng = mapKeys.length;
+// function processSelectedRegion(selection) {
+// 	var mapKeys = Object.keys(regionLibrary.mapRegions),
+// 		lng = mapKeys.length;
 
-	for (var i = 0; i < lng; i ++) {
-		if (selection[0].id === mapKeys[i]) {
-			var newRegion = regionLibrary.mapRegions[selection[0].id];
+// 	for (var i = 0; i < lng; i ++) {
+// 		if (selection[0].id === mapKeys[i]) {
+// 			var newRegion = regionLibrary.mapRegions[selection[0].id];
 
-			return newRegion;
-		}
-	}
-}
+// 			return newRegion;
+// 		}
+// 	}
+// }
 
-function getSelectedRegion(map) {
-	//var selected = [{id: "FR-H", showAsSelected: true}];
-	console.log("getSelectedRegion triggered");
+// function getSelectedRegion(map) {
+// 	//var selected = [{id: "FR-H", showAsSelected: true}];
+// 	console.log("getSelectedRegion triggered");
 
-	var selected = [];
-	if (map.dataProvider.areas.showAsSelected) {
-		selected.push({id: map.dataProvider.areas.showAsSelected.id})
-	}
-	console.log(selected);
-	return selected;
+// 	var selected = [];
+// 	if (map.dataProvider.areas.showAsSelected) {
+// 		selected.push({id: map.dataProvider.areas.showAsSelected.id})
+// 	}
+// 	console.log(selected);
+// 	return selected;
 	
-}
+// }
 
 function buildDataObj(data) {
 	var lng = data.count,
@@ -392,29 +415,22 @@ function searchData(addressCont, data) { //for the file containing all regions p
 	console.log("search data triggered");
 
 	for (var region of addressCont) {
-// console.log('--><');
-// console.log(data.length);
-// console.log(region, lng);
 
-		for(var h=0; h<data.length; h++)
+		for(var i=0; i < data.length; i++)
 		{
-			if( Object.keys(data[h]).length )
+			if( Object.keys(data[i]).length )
 			{
-				// console.log(data[h]);
-				for(var k in data[h])
+				for(var j in data[i])
 				{
-					// console.log(data[h][k]['ID']);
-					if (region == data[h][k].location.region) {
+					if (region == data[i][j].location.region) {
 						var obj = {
-							title : data[h][k].title,
-							theme : data[h][k].theme,
-							region : data[h][k].location.region,
-							department : data[h][k].location.department,
-							url : data[h][k].url
+							title : data[i][j].title,
+							theme : data[i][j].theme,
+							region : data[i][j].location.region,
+							department : data[i][j].location.department,
+							url : data[i][j].url
 						};
-						// console.log(obj.title);
 						result += displayResult(obj);
-						// console.log(result);
 					}
 				}
 			}
@@ -477,19 +493,14 @@ function processQuery(query) {
 function handleActions(e, map) {
 	e.preventDefault();
 
-<<<<<<< HEAD
+	// var selectedRegion = getSelectedRegion(map);
+	// console.log("selectedRegion " + selectedRegion[0].id);
+	// var processedMapRegion = processSelectedRegion(selectedRegion);
+	// console.log("processedMapRegion " + processedMapRegion);
 
-	var selectedRegion = getSelectedRegion(map);
-	console.log("selectedRegion " + selectedRegion[0].id);
-	var processedMapRegion = processSelectedRegion(selectedRegion);
-	console.log("processedMapRegion " + processedMapRegion);
-
-	var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val() || processedMapRegion,
-		newQuery = checkQuery(query),	
-=======
+	// var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val() || processedMapRegion,
 	var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val(),
 		newQuery = checkQuery(query),
->>>>>>> main-app
 		newUrlCont = generateEndpoint(newQuery),
 		data = getData(newUrlCont, newQuery);
 }
