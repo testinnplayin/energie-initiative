@@ -224,7 +224,6 @@ function renderState(currentState, data, addressCont) {
 
 		if (Array.isArray(addressCont)) {
 			var lng = Object.keys(data[1]).length;
-			console.log("second array branch triggered");
 
 			if (lng > 0) {
 				$('#mapdiv').empty();
@@ -349,15 +348,12 @@ function calculateThemeFreq(objArr) {
 		themeFreq[theme] = (themeFreq[theme] || 0) + 1;
 	});
 
-	console.log(themeFreq);
-
 	for (var theme in themeFreq) {
 		var themeObj = {};
+
 		themeObj["theme"] = theme;
 		themeObj["frequency"] = themeFreq[theme];
-		console.log(themeObj);
 		chartData.push(themeObj);
-		console.log(chartData);
 	}
 	var chart = drawChart(chartData, newRegion);
 	drawResultsMap(chart);
@@ -378,7 +374,6 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 		}
 
 		regionContainer.push(newUrl);
-		console.log(regionContainer);
 
 		return regionContainer; //"nouvelle-aquitaine" becomes ["aquitaine", "limousin", "poitou-charentes", "https://www.data.gouv.fr....."]
 	}
@@ -449,6 +444,7 @@ function searchData(addressCont, data) { //for the file containing all regions p
 	console.log("search data triggered");
 
 	for (var region of addressCont) {
+		var objArr = [];
 
 		for(var i=0; i < data.length; i++)
 		{
@@ -465,12 +461,13 @@ function searchData(addressCont, data) { //for the file containing all regions p
 							url : data[i][j].url
 						};
 						result += displayResult(obj);
+						objArr.push(obj);
 					}
 				}
 			}
 		}
 	}
-
+	calculateThemeFreq(objArr);
 	return result;
 }
 
@@ -481,7 +478,6 @@ function convertToNewReg(query) {
 	for (var oldRegion in regionLibrary.oldRegions) {
 		if (query === oldRegion && typeof query !== 'object') {
 			newRegion = regionLibrary.oldRegions[oldRegion];
-			console.log("convertToNewReg " + newRegion);
 			return newRegion;
 		} else if (Array.isArray(query)) {
 			for (var item of query) {
