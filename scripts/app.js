@@ -173,13 +173,10 @@ function drawResultsMap(chartData, newRegion) {
 		}
 	});
 
-	newMap.dataProvider.areas.push({ 'id': mapId, 'color': '#00CC00' });
+	newMap.dataProvider.areas.push({ 'id': mapId, 'color': '#00CC00', 'selectable' : true });
 
 	newMap.areasSettings = {
-		autoZoom: true,
-		unlistedAreas: "#CCCCCC",
-		rollOverOutlineColor: "#888888",
-		rollOverColor: "#00CCCC",
+		autoZoom: true
 	};
 
 	newMap.write("mapdiv");
@@ -187,6 +184,14 @@ function drawResultsMap(chartData, newRegion) {
 	newMap.addListener('clickMapObject', function(e) {
 		if (e.mapObject.id != undefined) {
 			var chart = drawChart(chartData, newRegion);
+			$('#chartdiv').position({
+				my: "right bottom",
+				at: "center center",
+				of: ".map"
+			});
+		}
+		if (e.mapObject.objectType !== "MapArea") {
+			return;
 		}
 	});
 }
