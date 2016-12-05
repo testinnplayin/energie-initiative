@@ -151,7 +151,19 @@ function drawInitialMap() {
 }
 
 
-function drawResultsMap(data) {
+
+function convertToMapId(newRegion) {
+	console.log("map id conversion triggered");
+	for (var region in regionLibrary.mapRegions) {
+		if (newRegion === regionLibrary.mapRegions[region]) {
+			console.log("region ID is " + region);
+			return region;
+		}
+	}
+}
+
+function drawResultsMap(chartData, newRegion) {
+	var mapId = convertToMapId(newRegion);
 	var newMap = AmCharts.makeChart("mapdiv", {
 		"type" : "map",
 		"theme" : "light",
@@ -161,13 +173,22 @@ function drawResultsMap(data) {
 		}
 	});
 
+	newMap.dataProvider.areas.push({ 'id': mapId, 'color': '#00CC00' });
+
 	newMap.areasSettings = {
+		autoZoom: true,
 		unlistedAreas: "#CCCCCC",
 		rollOverOutlineColor: "#888888",
-		rollOverColor: "#00CCCC"
+		rollOverColor: "#00CCCC",
 	};
 
 	newMap.write("mapdiv");
+
+	newMap.addListener('clickMapObject', function(e) {
+		if (e.mapObject.id != undefined) {
+			var chart = drawChart(chartData, newRegion);
+		}
+	});
 }
 
 function drawChart(chartData, newRegion) {
@@ -355,8 +376,7 @@ function calculateThemeFreq(objArr) {
 		themeObj["frequency"] = themeFreq[theme];
 		chartData.push(themeObj);
 	}
-	var chart = drawChart(chartData, newRegion);
-	drawResultsMap(chart);
+	drawResultsMap(chartData, newRegion);
 }
 
 function generateEndpoint(query) { //for nouvelle-aquitaine we have an object containing three different old regions and their times of addition to the database
