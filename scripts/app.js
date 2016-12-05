@@ -129,37 +129,10 @@ function drawInitialMap() {
 		},
 		"areasSettings" : {
 			"autoZoom" : false,
-		//	"selectedColor" : "#00CCCC",
-		//	"selectable" : true
-		},
-		// "listeners" : [{
-		// 	"event" : "clickMapObject",
-		// 	"method" : function(e) {
-		// 		if (e.mapObject.objectType !== "MapArea") {
-		// 			return;
-		// 		}
-
-		// 		var area = e.mapObject;
-
-		// 		area.showAsSelected = !area.showAsSelected;
-		// 		e.chart.returnInitialColor(area);
-		// 	}
-		// }]
+		}
 	});
 
 	return map;
-}
-
-
-
-function convertToMapId(newRegion) {
-	console.log("map id conversion triggered");
-	for (var region in regionLibrary.mapRegions) {
-		if (newRegion === regionLibrary.mapRegions[region]) {
-			console.log("region ID is " + region);
-			return region;
-		}
-	}
 }
 
 function drawResultsMap(chartData, newRegion) {
@@ -181,19 +154,7 @@ function drawResultsMap(chartData, newRegion) {
 
 	newMap.write("mapdiv");
 
-	newMap.addListener('clickMapObject', function(e) {
-		if (e.mapObject.id != undefined) {
-			var chart = drawChart(chartData, newRegion);
-			$('#chartdiv').position({
-				my: "right bottom",
-				at: "center center",
-				of: ".map"
-			});
-		}
-		if (e.mapObject.objectType !== "MapArea") {
-			return;
-		}
-	});
+	handleMapClick(newMap, newRegion, chartData);
 }
 
 function drawChart(chartData, newRegion) {
@@ -415,31 +376,16 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 
 //processing functions
 
-// function processSelectedRegion(selection) {
-// 	var mapKeys = Object.keys(regionLibrary.mapRegions),
-// 		lng = mapKeys.length;
 
-// 	for (var i = 0; i < lng; i ++) {
-// 		if (selection[0].id === mapKeys[i]) {
-// 			var newRegion = regionLibrary.mapRegions[selection[0].id];
-
-// 			return newRegion;
-// 		}
-// 	}
-// }
-
-// function getSelectedRegion(map) {
-// 	//var selected = [{id: "FR-H", showAsSelected: true}];
-// 	console.log("getSelectedRegion triggered");
-
-// 	var selected = [];
-// 	if (map.dataProvider.areas.showAsSelected) {
-// 		selected.push({id: map.dataProvider.areas.showAsSelected.id})
-// 	}
-// 	console.log(selected);
-// 	return selected;
-	
-// }
+function convertToMapId(newRegion) {
+	console.log("map id conversion triggered");
+	for (var region in regionLibrary.mapRegions) {
+		if (newRegion === regionLibrary.mapRegions[region]) {
+			console.log("region ID is " + region);
+			return region;
+		}
+	}
+}
 
 function buildDataObj(data) {
 	var lng = data.count,
@@ -565,16 +511,26 @@ function processQuery(query) {
 
 //event handler functions
 
+function handleMapClick(newMap, newRegion, chartData) {
+	newMap.addListener('clickMapObject', function(e) {
+		if (e.mapObject.id != undefined) {
+			var chart = drawChart(chartData, newRegion);
+			$('#chartdiv').position({
+				my: "right bottom",
+				at: "center center",
+				of: ".map"
+			});
+		}
+		if (e.mapObject.objectType !== "MapArea") {
+			return;
+		}
+	});
+}
+
 
 function handleActions(e, map) {
 	e.preventDefault();
 
-	// var selectedRegion = getSelectedRegion(map);
-	// console.log("selectedRegion " + selectedRegion[0].id);
-	// var processedMapRegion = processSelectedRegion(selectedRegion);
-	// console.log("processedMapRegion " + processedMapRegion);
-
-	// var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val() || processedMapRegion,
 	var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val(),
 		newQuery = checkQuery(query),
 		newUrlCont = generateEndpoint(newQuery),
