@@ -96,25 +96,118 @@ var regionLibrary = {
 		"provence-alpes-cote-dazur" : "provence-alpes-cote-dazur",
 		"rhone-alpes" : "auvergne-rhone-alpes",
 	},
+	mapRegions : {
+		"FR-A" : "grand-est",
+		"FR-B" : "nouvelle-aquitaine",
+		"FR-C" : "auvergne-rhone-alpes",
+		"FR-D" : "bourgogne-franche-comte",
+		"FR-E" : "bretagne",
+		"FR-F" : "centre-val-de-loire",
+		"FR-G" : "corse",
+		"FR-H" : "ile-de-france",
+		"FR-I" : "occitanie",
+		"FR-J" : "hauts-de-france",
+		"FR-K" : "normandie",
+		"FR-L" : "pays-de-la-loire",
+		"FR-M" : "provence-alpes-cote-dazur" 
+	}
 };
 
 
 
 //display functions
 
-var map = AmCharts.makeChart("mapdiv", {
-	"type" : "map",
-	"theme" : "light",
-	"dataProvider" : {
-		"map" : "france2016Low",
-		"getAreasFromMap" : true
-	},
-	"areaSettings" : {
-		"autoZoom" : false,
-		"selectedColor" : "#0000CC",
-		"selectable" : true
+function drawInitialMap() {
+
+	var map = AmCharts.makeChart("mapdiv", {
+		"type" : "map",
+		"theme" : "light",
+		"dataProvider" : {
+			"map" : "france2016Low",
+			"getAreasFromMap" : true,
+			"areas" : []
+		},
+		"areasSettings" : {
+			"autoZoom" : false,
+		//	"selectedColor" : "#00CCCC",
+		//	"selectable" : true
+		},
+		// "listeners" : [{
+		// 	"event" : "clickMapObject",
+		// 	"method" : function(e) {
+		// 		if (e.mapObject.objectType !== "MapArea") {
+		// 			return;
+		// 		}
+
+		// 		var area = e.mapObject;
+
+		// 		area.showAsSelected = !area.showAsSelected;
+		// 		e.chart.returnInitialColor(area);
+		// 	}
+		// }]
+	});
+
+	return map;
+}
+
+
+
+function convertToMapId(newRegion) {
+	console.log("map id conversion triggered");
+	for (var region in regionLibrary.mapRegions) {
+		if (newRegion === regionLibrary.mapRegions[region]) {
+			console.log("region ID is " + region);
+			return region;
+		}
 	}
-});
+}
+
+function drawResultsMap(chartData, newRegion) {
+	var mapId = convertToMapId(newRegion);
+	var newMap = AmCharts.makeChart("mapdiv", {
+		"type" : "map",
+		"theme" : "light",
+		"dataProvider" : {
+			"map" : "france2016Low",
+			"getAreasFromMap" : true,
+		}
+	});
+
+	newMap.dataProvider.areas.push({ 'id': mapId, 'color': '#00CC00', 'selectable' : true });
+
+	newMap.areasSettings = {
+		autoZoom: true
+	};
+
+	newMap.write("mapdiv");
+
+	newMap.addListener('clickMapObject', function(e) {
+		if (e.mapObject.id != undefined) {
+			var chart = drawChart(chartData, newRegion);
+			$('#chartdiv').position({
+				my: "right bottom",
+				at: "center center",
+				of: ".map"
+			});
+		}
+		if (e.mapObject.objectType !== "MapArea") {
+			return;
+		}
+	});
+}
+
+function drawChart(chartData, newRegion) {
+	var chart = new AmCharts.AmPieChart();
+
+	chart.dataProvider = chartData;
+	chart.titleField = "theme";
+	chart.valueField = "frequency";
+	chart.backgroundColor = "#000000";
+	chart.backgroundAlpha = 0.4;
+	chart.addLabel("0", "!20", newRegion, "center", 18);
+	chart.labelsEnabled = false;
+	chart.write("chartdiv");
+}
 
 function displayResult(obj) {
 	var result = '';
@@ -150,15 +243,16 @@ function displayResult(obj) {
 function renderState(currentState, data, addressCont) {
 	if (currentState === "results") {
 		$('.js-result-container').find('.panel').remove();
+
 		console.log(addressCont);
 
 		var result;
 
 		if (Array.isArray(addressCont)) {
 			var lng = Object.keys(data[1]).length;
-			console.log("second array branch triggered");
 
 			if (lng > 0) {
+				$('#mapdiv').empty();
 				result = searchData(addressCont, data);
 			}
 
@@ -167,6 +261,7 @@ function renderState(currentState, data, addressCont) {
 			var lng = data.initiatives.length;
 
 			if (lng > 0) {
+				$('#mapdiv').empty();
 				result = buildDataObj(data);
 			}
 
@@ -250,19 +345,6 @@ function checkRegion(region) {
 	return region;
 }
 
-function convertToNewReg(query) {
-	var newRegion = "";
-	console.log("region conversion triggered");
-
-	for (var oldRegion in regionLibrary.oldRegions) {
-		if (query === oldRegion && typeof query !== 'object') {
-			newRegion = regionLibrary.oldRegions[oldRegion];
-			console.log("convertToNewReg " + newRegion);
-			return newRegion;
-		}
-	}
-}
-
 function checkState(currentState) {
 	if (currentState === 'index') {
 		currentState = 'results';
@@ -273,6 +355,34 @@ function checkState(currentState) {
 }
 
 //other functions
+
+
+function calculateThemeFreq(objArr) {
+	var themeFreq = {},
+		themeArray = [],
+		regionArray = [],
+		chartData = [];
+
+	for (var obj of objArr) {
+		themeArray.push(obj.theme);
+		regionArray.push(obj.region);
+	}
+
+	var newRegion = convertToNewReg(regionArray);
+
+	themeArray.forEach(function(theme) {
+		themeFreq[theme] = (themeFreq[theme] || 0) + 1;
+	});
+
+	for (var theme in themeFreq) {
+		var themeObj = {};
+
+		themeObj["theme"] = theme;
+		themeObj["frequency"] = themeFreq[theme];
+		chartData.push(themeObj);
+	}
+	drawResultsMap(chartData, newRegion);
+}
 
 function generateEndpoint(query) { //for nouvelle-aquitaine we have an object containing three different old regions and their times of addition to the database
 	var regionContainer = [];
@@ -289,7 +399,6 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 		}
 
 		regionContainer.push(newUrl);
-		console.log(regionContainer);
 
 		return regionContainer; //"nouvelle-aquitaine" becomes ["aquitaine", "limousin", "poitou-charentes", "https://www.data.gouv.fr....."]
 	}
@@ -306,8 +415,35 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 
 //processing functions
 
+// function processSelectedRegion(selection) {
+// 	var mapKeys = Object.keys(regionLibrary.mapRegions),
+// 		lng = mapKeys.length;
+
+// 	for (var i = 0; i < lng; i ++) {
+// 		if (selection[0].id === mapKeys[i]) {
+// 			var newRegion = regionLibrary.mapRegions[selection[0].id];
+
+// 			return newRegion;
+// 		}
+// 	}
+// }
+
+// function getSelectedRegion(map) {
+// 	//var selected = [{id: "FR-H", showAsSelected: true}];
+// 	console.log("getSelectedRegion triggered");
+
+// 	var selected = [];
+// 	if (map.dataProvider.areas.showAsSelected) {
+// 		selected.push({id: map.dataProvider.areas.showAsSelected.id})
+// 	}
+// 	console.log(selected);
+// 	return selected;
+	
+// }
+
 function buildDataObj(data) {
 	var lng = data.count,
+		objArr = [],
 		result = "";
 
 	for (var i = 0; i < lng; i++) {
@@ -320,8 +456,9 @@ function buildDataObj(data) {
 		};
 
 		result += displayResult(obj);
+		objArr.push(obj);
 	}
-
+	calculateThemeFreq(objArr);
 	return result;
 }
 
@@ -332,53 +469,51 @@ function searchData(addressCont, data) { //for the file containing all regions p
 	console.log("search data triggered");
 
 	for (var region of addressCont) {
-// console.log('--><');
-// console.log(data.length);
-// console.log(region, lng);
+		var objArr = [];
 
-		for(var h=0; h<data.length; h++)
+		for(var i=0; i < data.length; i++)
 		{
-			if( Object.keys(data[h]).length )
+			if( Object.keys(data[i]).length )
 			{
-				// console.log(data[h]);
-				for(var k in data[h])
+				for(var j in data[i])
 				{
-					// console.log(data[h][k]['ID']);
-					if (region == data[h][k].location.region) {
+					if (region == data[i][j].location.region) {
 						var obj = {
-							title : data[h][k].title,
-							theme : data[h][k].theme,
-							region : data[h][k].location.region,
-							department : data[h][k].location.department,
-							url : data[h][k].url
+							title : data[i][j].title,
+							theme : data[i][j].theme,
+							region : data[i][j].location.region,
+							department : data[i][j].location.department,
+							url : data[i][j].url
 						};
-						// console.log(obj.title);
 						result += displayResult(obj);
-						// console.log(result);
+						objArr.push(obj);
 					}
 				}
 			}
 		}
-
-
-		// for (var i = 0; i < lng; i++) {
-		// 	if (region == data[1][i].location.region) {
-		// 		var obj = {
-		// 			title : data[1][i].title,
-		// 			theme : data[1][i].theme,
-		// 			region : data[1][i].location.region,
-		// 			department : data[1][i].location.department,
-		// 			url : data[1][i].url
-		// 		};
-		// 		// console.log(obj.title);
-		// 		result += displayResult(obj);
-		// 		// console.log(result);
-		// 	}
-		// 	// else{ console.log('NOPE'); console.log(data[1][i].location.region); }
-		// }
 	}
-
+	calculateThemeFreq(objArr);
 	return result;
+}
+
+function convertToNewReg(query) {
+	var newRegion = "";
+	console.log("region conversion triggered");
+
+	for (var oldRegion in regionLibrary.oldRegions) {
+		if (query === oldRegion && typeof query !== 'object') {
+			newRegion = regionLibrary.oldRegions[oldRegion];
+			return newRegion;
+		} else if (Array.isArray(query)) {
+			for (var item of query) {
+				if (item === oldRegion) {
+					newRegion = regionLibrary.oldRegions[oldRegion];
+					console.log(newRegion);
+					return newRegion;
+				}
+			}
+		}
+	}
 }
 
 function stripAccent(processedQ) {
@@ -430,19 +565,25 @@ function processQuery(query) {
 
 //event handler functions
 
-function handleActions(e) {
+
+function handleActions(e, map) {
 	e.preventDefault();
 
+	// var selectedRegion = getSelectedRegion(map);
+	// console.log("selectedRegion " + selectedRegion[0].id);
+	// var processedMapRegion = processSelectedRegion(selectedRegion);
+	// console.log("processedMapRegion " + processedMapRegion);
+
+	// var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val() || processedMapRegion,
 	var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val(),
 		newQuery = checkQuery(query),
 		newUrlCont = generateEndpoint(newQuery),
 		data = getData(newUrlCont, newQuery);
-	console.log(query);
 }
 
-function handleSubmit() {
+function handleSubmit(map) {
 	$('.js-search-btn').click(function(e) {
-		handleActions(e);
+		handleActions(e, map);
 	});
 
 
@@ -451,9 +592,15 @@ function handleSubmit() {
 		var enterKey = 13;
 
 		if (e.which === enterKey) {
-			handleActions(e);
+			handleActions(e, map);
 		}
 	});
 }
 
-$(document).ready(handleSubmit);
+function handleInitialState() {
+	var map = drawInitialMap();
+
+	handleSubmit(map);
+}
+
+$(document).ready(handleInitialState);
