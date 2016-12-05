@@ -122,6 +122,10 @@ function drawInitialMap() {
 	var map = AmCharts.makeChart("mapdiv", {
 		"type" : "map",
 		"theme" : "light",
+		"zoomControl" : {
+			"homeButtonEnabled" : false,
+			"zoomControlEnabled" : false
+		},
 		"dataProvider" : {
 			"map" : "france2016Low",
 			"getAreasFromMap" : true,
@@ -140,6 +144,9 @@ function drawResultsMap(chartData, newRegion) {
 	var newMap = AmCharts.makeChart("mapdiv", {
 		"type" : "map",
 		"theme" : "light",
+		"zoomControl" : {
+			"homeButtonEnabled" : false
+		},
 		"dataProvider" : {
 			"map" : "france2016Low",
 			"getAreasFromMap" : true,
