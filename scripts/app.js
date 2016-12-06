@@ -113,7 +113,7 @@ var regionLibrary = {
 	},
 	capRegions : {
 		"auvergne-rhone-alpes" : "Auvergne-Rhône-Alpes",
-		"bourgogne-franche-comte" : "Bourgone-Franche-Comté",
+		"bourgogne-franche-comte" : "Bourgogne-Franche-Comté",
 		"bretagne" : "Bretagne",
 		"centre-val-de-loire": "Centre-Val de Loire",
 		"corse" : "Corse",
@@ -218,11 +218,7 @@ function displayResult(obj) {
 		prettyRegion = prettifyRegion(region),
 		prettyDept;
 
-	if (obj.department === 'NULL' || obj.department === 'false') {
-		prettyDept = "Aucune précision";
-	} else {
-		prettyDept = obj.department;
-	}
+	(obj.department === 'NULL' || obj.department === 'false') ? prettyDept = "Aucune précision" : prettyDept = obj.department; //data from government shows NULL and rarely false as strings for the department
 
 	result += "<div class=\"col-xs-12 col-md-6 col-lg-4 result-box\">"
 		+ "<div class=\"panel panel-default js-panel\">"
@@ -234,13 +230,13 @@ function displayResult(obj) {
 				+ "</div>"
 				+ "<ul class=\"info-list\">"
 					+ "<li>"
-						+ "<p>Theme: " + obj.theme + "</p>"
+						+ "<p>Thème: " + obj.theme + "</p>"
 					+ "</li>"
 					+ "<li>"
-						+ "<p>Old region: " + prettyRegion + "</p>" //Note: Can prettify this later on if feel need; data[i][i-1].location.region
+						+ "<p>Région: " + prettyRegion + "</p>" //Note: Can prettify this later on if feel need; data[i][i-1].location.region
 					+ "</li>"
 					+ "<li>"
-						+ "<p>Department: " + prettyDept + "</p>"
+						+ "<p>Département: " + prettyDept + "</p>"
 					+ "</li>"
 					+ "<li>"
 						+ "<p><a href=\"" + obj.url + "\" target=\"_blank\">Link to Source</a></p>"
@@ -532,7 +528,7 @@ function processQuery(query) { //renders all letters to lowercase and has functi
 	var processedQ = query.toLowerCase().replace("'", "").replace(/ /g, '-'), 
 		strippedQ = stripAccent(processedQ);
 
-	if (strippedQ === "mobilite-et-transports-durables") {
+	if (strippedQ === "mobilite-et-transports-durables") { //mobilite-et-transports-durables doesn't exist in the government's database
 		strippedQ = "mobilite-durable";
 		return strippedQ;
 	}
