@@ -110,6 +110,25 @@ var regionLibrary = {
 		"FR-K" : "normandie",
 		"FR-L" : "pays-de-la-loire",
 		"FR-M" : "provence-alpes-cote-dazur"
+	},
+	capRegions : {
+		"auvergne-rhone-alpes" : "Auvergne-Rhône-Alpes",
+		"bourgogne-franche-comte" : "Bourgone-Franche-Comté",
+		"bretagne" : "Bretagne",
+		"centre-val-de-loire": "Centre-Val de Loire",
+		"corse" : "Corse",
+		"guadeloupe" : "Guadeloupe",
+		"guyane" : "Guyane",
+		"grand-est" : "Grand-Est",
+		"hauts-de-france" : "Hauts-de-France",
+		"ile-de-france" : "Île-de-France",
+		"la-reunion" : "La Réunion",
+		"martinique" : "Martinique",
+		"normandie" : "Normandie",
+		"nouvelle-aquitaine" : "Nouvelle-Aquitaine",
+		"occitanie" : "Occitanie",
+		"pays-de-la-loire" : "Pays de la Loire",
+		"provence-alpes-cote-dazur" : "Provence-Alpes-Côté d'Azur"
 	}
 };
 
@@ -169,14 +188,29 @@ function drawResultsMap(chartData, newRegion) {
 
 	setTimeout(function(){
 		//$('path[aria-label="'+newRegion.charAt(0).toUpperCase()+'  "]').remove();
-		$('path[aria-label="Corse  "]').mouseup();
-		console.log('working?');
-		console.log($('path[aria-label="'+newRegion.charAt(0).toUpperCase()+'"]'));
+		var keys = Object.keys(regionLibrary.capRegions);
+
+		for (var key of keys) {
+			if (newRegion === key) {
+				$('path[aria-label="' + regionLibrary.capRegions[key] + '  "]').mouseup();
+			}
+		}
+		
 	},200);
 
+		var chart = drawChart(chartData, newRegion);
 
-	handleMapClick(newMap, newRegion, chartData);
-}
+		$('#chartdiv').position({
+			my: "right bottom",
+			at: "right bottom",
+			of: ".map"
+		});
+		let cssObj = {
+			'right':'5%',
+			'left':'unset'
+		};
+		$('#chartdiv').css(cssObj);
+	}
 
 function toTitleCase(str)
 { return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}); }
@@ -534,28 +568,6 @@ function processQuery(query) {
 }
 
 //event handler functions
-
-function handleMapClick(newMap, newRegion, chartData) {
-	newMap.addListener('clickMapObject', function(e) {
-		if (e.mapObject.id != undefined) {
-			var chart = drawChart(chartData, newRegion);
-			$('#chartdiv').position({
-				my: "right bottom",
-				at: "right bottom",
-				of: ".map"
-			});
-			let cssObj = {
-				'right':'5%',
-				'left':'unset'
-			}
-			$('#chartdiv').css(cssObj);
-		}
-		if (e.mapObject.objectType !== "MapArea") {
-			return;
-		}
-	});
-}
-
 
 function handleActions(e, map) {
 	e.preventDefault();
