@@ -113,7 +113,7 @@ var regionLibrary = {
 	},
 	capRegions : {
 		"auvergne-rhone-alpes" : "Auvergne-Rhône-Alpes",
-		"bourgogne-franche-comte" : "Bourgone-Franche-Comté",
+		"bourgogne-franche-comte" : "Bourgogne-Franche-Comté",
 		"bretagne" : "Bretagne",
 		"centre-val-de-loire": "Centre-Val de Loire",
 		"corse" : "Corse",
@@ -137,7 +137,6 @@ var regionLibrary = {
 //display functions
 
 function drawInitialMap() {
-
 	var map = AmCharts.makeChart("mapdiv", {
 		"type" : "map",
 		"theme" : "light",
@@ -156,14 +155,11 @@ function drawInitialMap() {
 			"selectedColor" : "#FF0"
 		}
 	});
-
 	return map;
 }
 
 function drawResultsMap(chartData, newRegion) {
 	var mapId = convertToMapId(newRegion);
-
-
 	var newMap = AmCharts.makeChart("mapdiv", {
 		"type" : "map",
 		"theme" : "light",
@@ -177,36 +173,21 @@ function drawResultsMap(chartData, newRegion) {
 	});
 
 	newMap.dataProvider.areas.push({ 'id': mapId, 'selectable' : true, 'showAsSelected' : true });
-
 	newMap.areasSettings = {
 		autoZoom: true,
 		"rollOverColor" : "#F00",
 		"selectedColor" : "#F0F"
 	};
-
 	newMap.write("mapdiv");
+
 	var prettyRegion = prettifyRegion(newRegion);
 
-
 	setTimeout(function(){
-		$('path[aria-label="' + prettyRegion + '  "]').mouseup();
-
-		
+		$('path[aria-label="' + prettyRegion + '  "]').mouseup(); //for some reason there's a space at the end of every path aria-label entry
 	},200);
 
-		var chart = drawChart(chartData, prettyRegion);
-
-		$('#chartdiv').position({
-			my: "right bottom",
-			at: "right bottom",
-			of: ".map"
-		});
-		let cssObj = {
-			'right':'5%',
-			'left':'unset'
-		};
-		$('#chartdiv').css(cssObj);
-	}
+	var chart = drawChart(chartData, prettyRegion);
+}
 
 function drawChart(chartData, newRegion) {
 	var chart = new AmCharts.AmPieChart();
@@ -219,6 +200,16 @@ function drawChart(chartData, newRegion) {
 	chart.addLabel("0", "!20", newRegion, "center", 18);
 	chart.labelsEnabled = false;
 	chart.write("chartdiv");
+	$('#chartdiv').position({
+		my: "right bottom",
+		at: "right bottom",
+		of: ".map"
+	});
+	let cssObj = {
+		'right':'5%',
+		'left':'unset'
+	};
+	$('#chartdiv').css(cssObj);
 }
 
 function displayResult(obj) {
@@ -227,11 +218,7 @@ function displayResult(obj) {
 		prettyRegion = prettifyRegion(region),
 		prettyDept;
 
-	if (obj.department === 'NULL' || obj.department === 'false') {
-		prettyDept = "Aucune précision";
-	} else {
-		prettyDept = obj.department;
-	}
+	(obj.department === 'NULL' || obj.department === 'false') ? prettyDept = "Aucune précision" : prettyDept = obj.department; //data from government shows NULL and rarely false as strings for the department
 
 	result += "<div class=\"col-xs-12 col-md-6 col-lg-4 result-box\">"
 		+ "<div class=\"panel panel-default js-panel\">"
@@ -243,13 +230,13 @@ function displayResult(obj) {
 				+ "</div>"
 				+ "<ul class=\"info-list\">"
 					+ "<li>"
-						+ "<p>Theme: " + obj.theme + "</p>"
+						+ "<p>Thème: " + obj.theme + "</p>"
 					+ "</li>"
 					+ "<li>"
-						+ "<p>Old region: " + prettyRegion + "</p>" //Note: Can prettify this later on if feel need; data[i][i-1].location.region
+						+ "<p>Région: " + prettyRegion + "</p>" //Note: Can prettify this later on if feel need; data[i][i-1].location.region
 					+ "</li>"
 					+ "<li>"
-						+ "<p>Department: " + prettyDept + "</p>"
+						+ "<p>Département: " + prettyDept + "</p>"
 					+ "</li>"
 					+ "<li>"
 						+ "<p><a href=\"" + obj.url + "\" target=\"_blank\">Link to Source</a></p>"
@@ -263,18 +250,15 @@ function displayResult(obj) {
 
 function renderState(currentState, data, addressCont) {
 	if (currentState === "results") {
-		$('.js-result-container').find('.panel').remove();
-
-		console.log(addressCont);
-
 		var result;
+		$('.js-result-container').find('.panel').remove();
 
 		if (Array.isArray(addressCont)) {
 			var lng = Object.keys(data[1]).length;
 
 			if (lng > 0) {
 				$('#mapdiv').empty();
-				result = searchData(addressCont, data);
+				result = searchDataAndBuildObj(addressCont, data);
 			}
 
 			$('.js-result-container').html(result);
@@ -296,29 +280,17 @@ function renderState(currentState, data, addressCont) {
 
 //ajax call functions
 
-function getData(addressCont, newQuery) {
+function getData(addressCont, newQuery) { //the addresses will either be a single string representing one url or an array of strings containing the regions and the url for the large file with the latter being the last item
 	var address;
 
-	if (Array.isArray(addressCont)) {
-		address = addressCont.pop();
-		console.log("address from array " + address);
-		console.log(addressCont);
-	} else {
-		address = addressCont;
-
-	}
+	(Array.isArray(addressCont)) ? address = addressCont.pop() : address = addressCont;
 
 	$.ajax(address)
 	.done(function(data) {
 		var currentState = state.currentView,
 			status = checkState(currentState);
 
-		if (Array.isArray(addressCont)) {
-			console.log("array branch triggered");
-			renderState(status, data, addressCont);
-		} else {
-			renderState(status, data, newQuery);
-		}
+		(Array.isArray(addressCont)) ? renderState(status, data, addressCont) : renderState(status, data, newQuery);
 
 		console.log('successful call');
 		console.log(data);
@@ -357,12 +329,10 @@ function checkRegion(region) {
 
 			if (lng > 0) {
 				var newRegion = regionLibrary.newRegions[key];
-				console.log("new region is " + newRegion);
 				return newRegion;
 			}
 		}
 	}
-
 	return region;
 }
 
@@ -371,14 +341,13 @@ function checkState(currentState) {
 		currentState = 'results';
 		return currentState;
 	}
-
 	return currentState;
 }
 
 //other functions
 
 
-function calculateThemeFreq(objArr) {
+function calculateThemeFreq(objArr) { //an example chartData will be [{ 'theme' : 'renovations', 'frequency' : 3 }, { 'theme' : 'dechets', 'frequency' : 5}]
 	var themeFreq = {},
 		themeArray = [],
 		regionArray = [],
@@ -405,29 +374,23 @@ function calculateThemeFreq(objArr) {
 	drawResultsMap(chartData, newRegion);
 }
 
-function generateEndpoint(query) { //for nouvelle-aquitaine we have an object containing three different old regions and their times of addition to the database
-	var regionContainer = [];
-	console.log("The query is " + query);
+function generateEndpoint(query) { //for nouvelle-aquitaine we have an object containing three different old regions and their times of addition to the database, for alsace we have a string
+	var regionContainer = [],
+		newRegion = convertToNewReg(query);
 
-	var newRegion = convertToNewReg(query);
-
-	if (typeof query === 'object') {
+	if (typeof query === 'object') { //branch followed for a new region containing multiple old regions, goes to the large file containing all regions
 		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + regionLibrary.newRegions['lensemble']['all']
 		+ "/initiatives_all.json";
 
 		for (var region in query) {
 			regionContainer.push(region);
 		}
-
 		regionContainer.push(newUrl);
-
 		return regionContainer; //"nouvelle-aquitaine" becomes ["aquitaine", "limousin", "poitou-charentes", "https://www.data.gouv.fr....."]
 	}
 
 	var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + regionLibrary.newRegions[newRegion][query] + "/initiatives_"
 	+ query + ".json";
-
-	console.log(newUrl);
 
 	return newUrl;
 }
@@ -447,17 +410,15 @@ function prettifyRegion(region) {
 }
 
 
-function convertToMapId(newRegion) {
-	console.log("map id conversion triggered");
+function convertToMapId(newRegion) { //converts the new region name to the mapId for the region in order for display purposes
 	for (var region in regionLibrary.mapRegions) {
 		if (newRegion === regionLibrary.mapRegions[region]) {
-			console.log("region ID is " + region);
 			return region;
 		}
 	}
 }
 
-function buildDataObj(data) {
+function buildDataObj(data) { //for the files for each individual region (old regions)
 	var lng = data.count,
 		objArr = [],
 		result = "";
@@ -474,15 +435,13 @@ function buildDataObj(data) {
 		result += displayResult(obj);
 		objArr.push(obj);
 	}
-	calculateThemeFreq(objArr);
+	calculateThemeFreq(objArr); //see comment under searchData
 	return result;
 }
 
-function searchData(addressCont, data) { //for the file containing all regions put together, all of the data is stored in a large array of objects, not an object containing an array of objects like in ind regions
+function searchDataAndBuildObj(addressCont, data) { //for the file containing all regions put together, all of the data is stored in a large array of objects, not an object containing an array of objects like in ind regions
 	var lng = Object.keys(data[1]).length,
 		result = "";
-
-	console.log("search data triggered");
 
 	for (var region of addressCont) {
 		var objArr = [];
@@ -508,13 +467,12 @@ function searchData(addressCont, data) { //for the file containing all regions p
 			}
 		}
 	}
-	calculateThemeFreq(objArr);
+	calculateThemeFreq(objArr);//calculates the number of articles for each theme for pie chart
 	return result;
 }
 
-function convertToNewReg(query) {
+function convertToNewReg(query) { //converts an old region name to a new region for display purposes; query can be either an array or an object
 	var newRegion = "";
-	console.log("region conversion triggered");
 
 	for (var oldRegion in regionLibrary.oldRegions) {
 		if (query === oldRegion && typeof query !== 'object') {
@@ -524,7 +482,6 @@ function convertToNewReg(query) {
 			for (var item of query) {
 				if (item === oldRegion) {
 					newRegion = regionLibrary.oldRegions[oldRegion];
-					console.log(newRegion);
 					return newRegion;
 				}
 			}
@@ -567,15 +524,14 @@ function stripAccent(processedQ) {
 	return noAccentQ;
 }
 
-function processQuery(query) {
-	var processedQ = query.toLowerCase().replace("'", "").replace(/ /g, '-'), //"île-de-france"
-		strippedQ = stripAccent(processedQ); //ile-de-france
+function processQuery(query) { //renders all letters to lowercase and has function to strip accents and apostrophes from letters of strings going to URLs, replaces whitespaces with -
+	var processedQ = query.toLowerCase().replace("'", "").replace(/ /g, '-'), 
+		strippedQ = stripAccent(processedQ);
 
-	if (strippedQ === "mobilite-et-transports-durables") {
+	if (strippedQ === "mobilite-et-transports-durables") { //mobilite-et-transports-durables doesn't exist in the government's database
 		strippedQ = "mobilite-durable";
 		return strippedQ;
 	}
-
 	return strippedQ;
 }
 
@@ -584,7 +540,7 @@ function processQuery(query) {
 function handleActions(e, map) {
 	e.preventDefault();
 
-	var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val(),
+	var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val(), //query can be either typed in or clicked on radio button
 		newQuery = checkQuery(query),
 		newUrlCont = generateEndpoint(newQuery),
 		data = getData(newUrlCont, newQuery);
@@ -594,8 +550,6 @@ function handleSubmit(map) {
 	$('.js-search-btn').click(function(e) {
 		handleActions(e, map);
 	});
-
-
 
 	$('input[type="text"]').keypress(function(e) {
 		var enterKey = 13;
