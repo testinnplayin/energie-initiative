@@ -224,7 +224,14 @@ function drawChart(chartData, newRegion) {
 function displayResult(obj) {
 	var result = '',
 		region = convertToNewReg(obj.region),
-		prettyRegion = prettifyRegion(region);
+		prettyRegion = prettifyRegion(region),
+		prettyDept;
+
+	if (obj.department === 'NULL' || obj.department === 'false') {
+		prettyDept = "Aucune précision";
+	} else {
+		prettyDept = obj.department;
+	}
 
 	result += "<div class=\"col-xs-12 col-md-6 col-lg-4 result-box\">"
 		+ "<div class=\"panel panel-default js-panel\">"
@@ -242,7 +249,7 @@ function displayResult(obj) {
 						+ "<p>Old region: " + prettyRegion + "</p>" //Note: Can prettify this later on if feel need; data[i][i-1].location.region
 					+ "</li>"
 					+ "<li>"
-						+ "<p>Department: " + obj.department + "</p>"
+						+ "<p>Department: " + prettyDept + "</p>"
 					+ "</li>"
 					+ "<li>"
 						+ "<p><a href=\"" + obj.url + "\" target=\"_blank\">Link to Source</a></p>"
