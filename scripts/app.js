@@ -301,8 +301,6 @@ function getData(addressCont, newQuery) {
 
 	if (Array.isArray(addressCont)) {
 		address = addressCont.pop();
-		console.log("address from array " + address);
-		console.log(addressCont);
 	} else {
 		address = addressCont;
 
@@ -375,8 +373,9 @@ function checkState(currentState) {
 	return currentState;
 }
 
-//other functions
 
+
+//other functions
 
 function calculateThemeFreq(objArr) {
 	var themeFreq = {},
@@ -406,10 +405,8 @@ function calculateThemeFreq(objArr) {
 }
 
 function generateEndpoint(query) { //for nouvelle-aquitaine we have an object containing three different old regions and their times of addition to the database
-	var regionContainer = [];
-	console.log("The query is " + query);
-
-	var newRegion = convertToNewReg(query);
+	var regionContainer = [],
+		newRegion = convertToNewReg(query);
 
 	if (typeof query === 'object') {
 		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + regionLibrary.newRegions['lensemble']['all']
@@ -426,8 +423,6 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 
 	var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + regionLibrary.newRegions[newRegion][query] + "/initiatives_"
 	+ query + ".json";
-
-	console.log(newUrl);
 
 	return newUrl;
 }
@@ -448,10 +443,8 @@ function prettifyRegion(region) {
 
 
 function convertToMapId(newRegion) {
-	console.log("map id conversion triggered");
 	for (var region in regionLibrary.mapRegions) {
 		if (newRegion === regionLibrary.mapRegions[region]) {
-			console.log("region ID is " + region);
 			return region;
 		}
 	}
@@ -479,10 +472,8 @@ function buildDataObj(data) {
 }
 
 function searchData(addressCont, data) { //for the file containing all regions put together, all of the data is stored in a large array of objects, not an object containing an array of objects like in ind regions
-	var lng = Object.keys(data[1]).length,
+	var lng = Object.keys(data[1]).length, //each new region and its data is contained in an object that is the property of 'index' of the new object after the empty object
 		result = "";
-
-	console.log("search data triggered");
 
 	for (var region of addressCont) {
 		var objArr = [];
