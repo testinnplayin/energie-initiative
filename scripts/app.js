@@ -65,7 +65,7 @@ var regionLibrary = {
 			"provence-alpes-cote-dazur" : "160434"
 		},
 		"lensemble" : {
-			"lensemble" : "160312"
+			"all" : "160312"
 		}
 	},
 	oldRegions : {
@@ -109,7 +109,26 @@ var regionLibrary = {
 		"FR-J" : "hauts-de-france",
 		"FR-K" : "normandie",
 		"FR-L" : "pays-de-la-loire",
-		"FR-M" : "provence-alpes-cote-dazur" 
+		"FR-M" : "provence-alpes-cote-dazur"
+	},
+	capRegions : {
+		"auvergne-rhone-alpes" : "Auvergne-Rhône-Alpes",
+		"bourgogne-franche-comte" : "Bourgone-Franche-Comté",
+		"bretagne" : "Bretagne",
+		"centre-val-de-loire": "Centre-Val de Loire",
+		"corse" : "Corse",
+		"guadeloupe" : "Guadeloupe",
+		"guyane" : "Guyane",
+		"grand-est" : "Grand-Est",
+		"hauts-de-france" : "Hauts-de-France",
+		"ile-de-france" : "Île-de-France",
+		"la-reunion" : "La Réunion",
+		"martinique" : "Martinique",
+		"normandie" : "Normandie",
+		"nouvelle-aquitaine" : "Nouvelle-Aquitaine",
+		"occitanie" : "Occitanie",
+		"pays-de-la-loire" : "Pays de la Loire",
+		"provence-alpes-cote-dazur" : "Provence-Alpes-Côté d'Azur"
 	}
 };
 
@@ -122,6 +141,10 @@ function drawInitialMap() {
 	var map = AmCharts.makeChart("mapdiv", {
 		"type" : "map",
 		"theme" : "light",
+		"zoomControl" : {
+			"homeButtonEnabled" : false,
+			"zoomControlEnabled" : false
+		},
 		"dataProvider" : {
 			"map" : "france2016Low",
 			"getAreasFromMap" : true,
@@ -129,72 +152,61 @@ function drawInitialMap() {
 		},
 		"areasSettings" : {
 			"autoZoom" : false,
-		//	"selectedColor" : "#00CCCC",
-		//	"selectable" : true
-		},
-		// "listeners" : [{
-		// 	"event" : "clickMapObject",
-		// 	"method" : function(e) {
-		// 		if (e.mapObject.objectType !== "MapArea") {
-		// 			return;
-		// 		}
-
-		// 		var area = e.mapObject;
-
-		// 		area.showAsSelected = !area.showAsSelected;
-		// 		e.chart.returnInitialColor(area);
-		// 	}
-		// }]
+			"rollOverColor" : "#F00",
+			"selectedColor" : "#FF0"
+		}
 	});
 
 	return map;
 }
 
-
-
-function convertToMapId(newRegion) {
-	console.log("map id conversion triggered");
-	for (var region in regionLibrary.mapRegions) {
-		if (newRegion === regionLibrary.mapRegions[region]) {
-			console.log("region ID is " + region);
-			return region;
-		}
-	}
-}
-
 function drawResultsMap(chartData, newRegion) {
 	var mapId = convertToMapId(newRegion);
+
+
 	var newMap = AmCharts.makeChart("mapdiv", {
 		"type" : "map",
 		"theme" : "light",
+		"zoomControl" : {
+			"homeButtonEnabled" : false
+		},
 		"dataProvider" : {
 			"map" : "france2016Low",
 			"getAreasFromMap" : true,
 		}
 	});
 
-	newMap.dataProvider.areas.push({ 'id': mapId, 'color': '#00CC00', 'selectable' : true });
+	newMap.dataProvider.areas.push({ 'id': mapId, 'selectable' : true, 'showAsSelected' : true });
 
 	newMap.areasSettings = {
-		autoZoom: true
+		autoZoom: true,
+		"rollOverColor" : "#F00",
+		"selectedColor" : "#F0F"
 	};
 
 	newMap.write("mapdiv");
+	var prettyRegion = prettifyRegion(newRegion);
 
-	newMap.addListener('clickMapObject', function(e) {
-		if (e.mapObject.id != undefined) {
-			var chart = drawChart(chartData, newRegion);
-			$('#chartdiv').position({
-				my: "right bottom",
-				at: "center center",
-				of: ".map"
-			});
-		}
-		if (e.mapObject.objectType !== "MapArea") {
-			return;
-		}
-	});
-}
+
+	setTimeout(function(){
+		$('path[aria-label="' + prettyRegion + '  "]').mouseup();
+
+		
+	},200);
+
+		var chart = drawChart(chartData, prettyRegion);
+
+		$('#chartdiv').position({
+			my: "right bottom",
+			at: "right bottom",
+			of: ".map"
+		});
+		let cssObj = {
+			'right':'5%',
+			'left':'unset'
+		};
+		$('#chartdiv').css(cssObj);
+	}
 
 function drawChart(chartData, newRegion) {
 	var chart = new AmCharts.AmPieChart();
@@ -210,7 +222,9 @@ function drawChart(chartData, newRegion) {
 }
 
 function displayResult(obj) {
-	var result = '';
+	var result = '',
+		region = convertToNewReg(obj.region),
+		prettyRegion = prettifyRegion(region);
 
 	result += "<div class=\"col-xs-12 col-md-6 col-lg-4 result-box\">"
 		+ "<div class=\"panel panel-default js-panel\">"
@@ -225,7 +239,7 @@ function displayResult(obj) {
 						+ "<p>Theme: " + obj.theme + "</p>"
 					+ "</li>"
 					+ "<li>"
-						+ "<p>Old region: " + convertToNewReg(obj.region) + "</p>" //Note: Can prettify this later on if feel need; data[i][i-1].location.region
+						+ "<p>Old region: " + prettyRegion + "</p>" //Note: Can prettify this later on if feel need; data[i][i-1].location.region
 					+ "</li>"
 					+ "<li>"
 						+ "<p>Department: " + obj.department + "</p>"
@@ -319,7 +333,7 @@ function getData(addressCont, newQuery) {
 function checkQuery(query) {
 	if (query === "" || query === undefined) {
 		$('.js-search-form-group').append('<p>Please enter a valid region name</p>')
-	} else { //this will change when adding theme search capabilities
+	} else { 
 		var newQuery = processQuery(query);
 		var region = checkRegion(newQuery);
 
@@ -334,9 +348,9 @@ function checkRegion(region) {
 		if (region === key) {
 			var lng = Object.keys(regionLibrary.newRegions[region]).length;
 
-			if (lng > 1) {
+			if (lng > 0) {
 				var newRegion = regionLibrary.newRegions[key];
-
+				console.log("new region is " + newRegion);
 				return newRegion;
 			}
 		}
@@ -391,7 +405,7 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 	var newRegion = convertToNewReg(query);
 
 	if (typeof query === 'object') {
-		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + regionLibrary.newRegions['lensemble']['lensemble']
+		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + regionLibrary.newRegions['lensemble']['all']
 		+ "/initiatives_all.json";
 
 		for (var region in query) {
@@ -415,31 +429,26 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 
 //processing functions
 
-// function processSelectedRegion(selection) {
-// 	var mapKeys = Object.keys(regionLibrary.mapRegions),
-// 		lng = mapKeys.length;
+function prettifyRegion(region) {
+	var keys = Object.keys(regionLibrary.capRegions);
 
-// 	for (var i = 0; i < lng; i ++) {
-// 		if (selection[0].id === mapKeys[i]) {
-// 			var newRegion = regionLibrary.mapRegions[selection[0].id];
+	for (var key of keys) {
+		if (region === key) {
+			return regionLibrary.capRegions[region];
+		}
+	}
+}
 
-// 			return newRegion;
-// 		}
-// 	}
-// }
 
-// function getSelectedRegion(map) {
-// 	//var selected = [{id: "FR-H", showAsSelected: true}];
-// 	console.log("getSelectedRegion triggered");
-
-// 	var selected = [];
-// 	if (map.dataProvider.areas.showAsSelected) {
-// 		selected.push({id: map.dataProvider.areas.showAsSelected.id})
-// 	}
-// 	console.log(selected);
-// 	return selected;
-	
-// }
+function convertToMapId(newRegion) {
+	console.log("map id conversion triggered");
+	for (var region in regionLibrary.mapRegions) {
+		if (newRegion === regionLibrary.mapRegions[region]) {
+			console.log("region ID is " + region);
+			return region;
+		}
+	}
+}
 
 function buildDataObj(data) {
 	var lng = data.count,
@@ -565,16 +574,9 @@ function processQuery(query) {
 
 //event handler functions
 
-
 function handleActions(e, map) {
 	e.preventDefault();
 
-	// var selectedRegion = getSelectedRegion(map);
-	// console.log("selectedRegion " + selectedRegion[0].id);
-	// var processedMapRegion = processSelectedRegion(selectedRegion);
-	// console.log("processedMapRegion " + processedMapRegion);
-
-	// var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val() || processedMapRegion,
 	var query = $('input[type="text"]').val() || $('input[type="radio"]:checked').val(),
 		newQuery = checkQuery(query),
 		newUrlCont = generateEndpoint(newQuery),
