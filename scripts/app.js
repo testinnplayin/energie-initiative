@@ -128,7 +128,7 @@ var regionLibrary = {
 		"nouvelle-aquitaine" : "Nouvelle-Aquitaine",
 		"occitanie" : "Occitanie",
 		"pays-de-la-loire" : "Pays de la Loire",
-		"provence-alpes-cote-dazur" : "Provence-Alpes-Côté d'Azur"
+		"provence-alpes-cote-dazur" : "Provence-Alpes-Côte d'Azur"
 	}
 };
 
