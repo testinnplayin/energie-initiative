@@ -65,7 +65,7 @@ var regionLibrary = {
 			"provence-alpes-cote-dazur" : "160434"
 		},
 		"lensemble" : {
-			"lensemble" : "160312"
+			"all" : "160312"
 		}
 	},
 	oldRegions : {
@@ -185,19 +185,16 @@ function drawResultsMap(chartData, newRegion) {
 	};
 
 	newMap.write("mapdiv");
+	var prettyRegion = prettifyRegion(newRegion);
+
 
 	setTimeout(function(){
-		var keys = Object.keys(regionLibrary.capRegions);
+		$('path[aria-label="' + prettyRegion + '  "]').mouseup();
 
-		for (var key of keys) {
-			if (newRegion === key) {
-				$('path[aria-label="' + regionLibrary.capRegions[key] + '  "]').mouseup();
-			}
-		}
 		
 	},200);
 
-		var chart = drawChart(chartData, newRegion);
+		var chart = drawChart(chartData, prettyRegion);
 
 		$('#chartdiv').position({
 			my: "right bottom",
@@ -225,7 +222,9 @@ function drawChart(chartData, newRegion) {
 }
 
 function displayResult(obj) {
-	var result = '';
+	var result = '',
+		region = convertToNewReg(obj.region),
+		prettyRegion = prettifyRegion(region);
 
 	result += "<div class=\"col-xs-12 col-md-6 col-lg-4 result-box\">"
 		+ "<div class=\"panel panel-default js-panel\">"
@@ -240,7 +239,7 @@ function displayResult(obj) {
 						+ "<p>Theme: " + obj.theme + "</p>"
 					+ "</li>"
 					+ "<li>"
-						+ "<p>Old region: " + convertToNewReg(obj.region) + "</p>" //Note: Can prettify this later on if feel need; data[i][i-1].location.region
+						+ "<p>Old region: " + prettyRegion + "</p>" //Note: Can prettify this later on if feel need; data[i][i-1].location.region
 					+ "</li>"
 					+ "<li>"
 						+ "<p>Department: " + obj.department + "</p>"
@@ -406,7 +405,7 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 	var newRegion = convertToNewReg(query);
 
 	if (typeof query === 'object') {
-		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + regionLibrary.newRegions['lensemble']['lensemble']
+		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + regionLibrary.newRegions['lensemble']['all']
 		+ "/initiatives_all.json";
 
 		for (var region in query) {
@@ -429,6 +428,16 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 
 
 //processing functions
+
+function prettifyRegion(region) {
+	var keys = Object.keys(regionLibrary.capRegions);
+
+	for (var key of keys) {
+		if (region === key) {
+			return regionLibrary.capRegions[region];
+		}
+	}
+}
 
 
 function convertToMapId(newRegion) {
