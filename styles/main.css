@@ -34,8 +34,8 @@ p {
 /* CHART STYLES */
 
 #chartdiv {
-	width: 300px;
-	height: 200px;
+	width: 150px;
+	height: 100px;
 	z-index: 200;
 	position: absolute;
 
@@ -80,6 +80,11 @@ p {
 	.panel {
 		height: 400px;
 		margin: 10px auto;
+	}
+
+	#chartdiv {
+		width: 300px;
+		height: 200px;
 	}
 }
 
