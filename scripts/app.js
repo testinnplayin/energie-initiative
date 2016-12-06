@@ -440,7 +440,7 @@ function buildDataObj(data) { //for the files for each individual region (old re
 	return result;
 }
 
-function searchData(addressCont, data) { //for the file containing all regions put together, all of the data is stored in a large array of objects, not an object containing an array of objects like in ind regions
+function searchDataAndBuildObj(addressCont, data) { //for the file containing all regions put together, all of the data is stored in a large array of objects, not an object containing an array of objects like in ind regions
 	var lng = Object.keys(data[1]).length, //each new region and its data is contained in an object that is the property of 'index' of the new object after the empty object
 		result = "";
 
