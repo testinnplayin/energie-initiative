@@ -187,7 +187,6 @@ function drawResultsMap(chartData, newRegion) {
 	newMap.write("mapdiv");
 
 	setTimeout(function(){
-		//$('path[aria-label="'+newRegion.charAt(0).toUpperCase()+'  "]').remove();
 		var keys = Object.keys(regionLibrary.capRegions);
 
 		for (var key of keys) {
@@ -211,9 +210,6 @@ function drawResultsMap(chartData, newRegion) {
 		};
 		$('#chartdiv').css(cssObj);
 	}
-
-function toTitleCase(str)
-{ return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}); }
 
 function drawChart(chartData, newRegion) {
 	var chart = new AmCharts.AmPieChart();
@@ -338,7 +334,7 @@ function getData(addressCont, newQuery) {
 function checkQuery(query) {
 	if (query === "" || query === undefined) {
 		$('.js-search-form-group').append('<p>Please enter a valid region name</p>')
-	} else { //this will change when adding theme search capabilities
+	} else { 
 		var newQuery = processQuery(query);
 		var region = checkRegion(newQuery);
 
@@ -353,9 +349,9 @@ function checkRegion(region) {
 		if (region === key) {
 			var lng = Object.keys(regionLibrary.newRegions[region]).length;
 
-			if (lng > 1) {
+			if (lng > 0) {
 				var newRegion = regionLibrary.newRegions[key];
-
+				console.log("new region is " + newRegion);
 				return newRegion;
 			}
 		}
