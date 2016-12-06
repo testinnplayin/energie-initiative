@@ -19,6 +19,7 @@ p {
 
 .map {
 	margin: 0 auto 20px auto;
+	position:relative;
 }
 
 .map-box {
@@ -37,7 +38,7 @@ p {
 	height: 200px;
 	z-index: 200;
 	position: absolute;
-	
+
 }
 
 /* CHECKBOX STYLES */

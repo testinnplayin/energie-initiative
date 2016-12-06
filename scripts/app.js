@@ -109,7 +109,7 @@ var regionLibrary = {
 		"FR-J" : "hauts-de-france",
 		"FR-K" : "normandie",
 		"FR-L" : "pays-de-la-loire",
-		"FR-M" : "provence-alpes-cote-dazur" 
+		"FR-M" : "provence-alpes-cote-dazur"
 	}
 };
 
@@ -133,6 +133,8 @@ function drawInitialMap() {
 		},
 		"areasSettings" : {
 			"autoZoom" : false,
+			"rollOverColor" : "#F00",
+			"selectedColor" : "#FF0"
 		}
 	});
 
@@ -141,6 +143,8 @@ function drawInitialMap() {
 
 function drawResultsMap(chartData, newRegion) {
 	var mapId = convertToMapId(newRegion);
+
+
 	var newMap = AmCharts.makeChart("mapdiv", {
 		"type" : "map",
 		"theme" : "light",
@@ -153,16 +157,29 @@ function drawResultsMap(chartData, newRegion) {
 		}
 	});
 
-	newMap.dataProvider.areas.push({ 'id': mapId, 'color': '#00CC00', 'selectable' : true });
+	newMap.dataProvider.areas.push({ 'id': mapId, 'selectable' : true, 'showAsSelected' : true });
 
 	newMap.areasSettings = {
-		autoZoom: true
+		autoZoom: true,
+		"rollOverColor" : "#F00",
+		"selectedColor" : "#F0F"
 	};
 
 	newMap.write("mapdiv");
 
+	setTimeout(function(){
+		//$('path[aria-label="'+newRegion.charAt(0).toUpperCase()+'  "]').remove();
+		$('path[aria-label="Corse  "]').mouseup();
+		console.log('working?');
+		console.log($('path[aria-label="'+newRegion.charAt(0).toUpperCase()+'"]'));
+	},200);
+
+
 	handleMapClick(newMap, newRegion, chartData);
 }
+
+function toTitleCase(str)
+{ return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}); }
 
 function drawChart(chartData, newRegion) {
 	var chart = new AmCharts.AmPieChart();
@@ -524,9 +541,14 @@ function handleMapClick(newMap, newRegion, chartData) {
 			var chart = drawChart(chartData, newRegion);
 			$('#chartdiv').position({
 				my: "right bottom",
-				at: "center center",
+				at: "right bottom",
 				of: ".map"
 			});
+			let cssObj = {
+				'right':'5%',
+				'left':'unset'
+			}
+			$('#chartdiv').css(cssObj);
 		}
 		if (e.mapObject.objectType !== "MapArea") {
 			return;
