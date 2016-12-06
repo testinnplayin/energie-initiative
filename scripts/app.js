@@ -239,7 +239,7 @@ function displayResult(obj) {
 						+ "<p>Département: " + prettyDept + "</p>"
 					+ "</li>"
 					+ "<li>"
-						+ "<p><a href=\"" + obj.url + "\" target=\"_blank\">Link to Source</a></p>"
+						+ "<p><a href=\"" + obj.url + "\" target=\"_blank\">Lien vers source</a></p>"
 					+ "</li>"
 				+ "</ul>"
 		+ "</div>"
