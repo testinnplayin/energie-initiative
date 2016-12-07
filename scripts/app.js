@@ -151,8 +151,8 @@ function drawInitialMap() {
 		},
 		"areasSettings" : {
 			"autoZoom" : false,
-			"rollOverColor" : "#F00",
-			"selectedColor" : "#FF0"
+			"rollOverColor" : "#0F0",
+			"selectable" : false
 		}
 	});
 	return map;
@@ -172,11 +172,11 @@ function drawResultsMap(chartData, newRegion) {
 		}
 	});
 
-	newMap.dataProvider.areas.push({ 'id': mapId, 'selectable' : true, 'showAsSelected' : true });
+	newMap.dataProvider.areas.push({ 'id': mapId, 'selectable' : false, 'showAsSelected' : true });
 	newMap.areasSettings = {
 		autoZoom: true,
-		"rollOverColor" : "#F00",
-		"selectedColor" : "#F0F"
+		rollOverColor : "#0F0",
+		selectedColor : "#66FF66"
 	};
 	newMap.write("mapdiv");
 
@@ -239,7 +239,7 @@ function displayResult(obj) {
 						+ "<p>Département: " + prettyDept + "</p>"
 					+ "</li>"
 					+ "<li>"
-						+ "<p><a href=\"" + obj.url + "\" target=\"_blank\">Lien vers source</a></p>"
+						+ "<p><a href=\"" + obj.url + "\" target=\"_blank\">Lire l'initiative</a></p>"
 					+ "</li>"
 				+ "</ul>"
 		+ "</div>"
@@ -311,7 +311,7 @@ function getData(addressCont, newQuery) { //the addresses will either be a singl
 
 function checkQuery(query) {
 	if (query === "" || query === undefined) {
-		$('.js-search-form-group').append('<p>Please enter a valid region name</p>')
+		$('.js-search-form-group').append('<p>Saisissez le nom d\'une région valide.</p>')
 	} else { 
 		var newQuery = processQuery(query);
 		var region = checkRegion(newQuery);
@@ -344,8 +344,9 @@ function checkState(currentState) {
 	return currentState;
 }
 
-//other functions
 
+
+//other functions
 
 function calculateThemeFreq(objArr) { //an example chartData will be [{ 'theme' : 'renovations', 'frequency' : 3 }, { 'theme' : 'dechets', 'frequency' : 5}]
 	var themeFreq = {},
@@ -373,6 +374,7 @@ function calculateThemeFreq(objArr) { //an example chartData will be [{ 'theme' 
 	}
 	drawResultsMap(chartData, newRegion);
 }
+
 
 function generateEndpoint(query) { //for nouvelle-aquitaine we have an object containing three different old regions and their times of addition to the database, for alsace we have a string
 	var regionContainer = [],
@@ -409,7 +411,6 @@ function prettifyRegion(region) {
 	}
 }
 
-
 function convertToMapId(newRegion) { //converts the new region name to the mapId for the region in order for display purposes
 	for (var region in regionLibrary.mapRegions) {
 		if (newRegion === regionLibrary.mapRegions[region]) {
@@ -440,7 +441,7 @@ function buildDataObj(data) { //for the files for each individual region (old re
 }
 
 function searchDataAndBuildObj(addressCont, data) { //for the file containing all regions put together, all of the data is stored in a large array of objects, not an object containing an array of objects like in ind regions
-	var lng = Object.keys(data[1]).length,
+	var lng = Object.keys(data[1]).length, //each new region and its data is contained in an object that is the property of 'index' of the new object after the empty object
 		result = "";
 
 	for (var region of addressCont) {
