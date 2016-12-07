@@ -41,11 +41,15 @@ p {
 
 }
 
+
+
 /* CHECKBOX STYLES */
 
 .checkbox-container {
 	padding-top: 100px;
 }
+
+
 
 /* RESULT STYLES */
 
@@ -56,6 +60,12 @@ p {
 .info-list > li > p {
 	text-align: left;
 }
+
+.panel-heading {
+	height: 100px;
+}
+
+
 
 /* MEDIA QUERIES */
 
