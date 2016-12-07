@@ -323,8 +323,8 @@ function checkQuery(query) {
 		$('.js-search-form-group').append('<p>Saisissez le nom d\'une région valide.</p>')
 	} else { 
 		$('.js-search-form-group > p').remove();
-		var newQuery = processQuery(query);
-		var region = checkRegion(newQuery);
+		var newQuery = processQuery(query),
+			region = checkRegion(newQuery);
 
 		return region;
 	}
@@ -574,6 +574,7 @@ function handleActions(e, map) {
 		newQuery = checkQuery(query),
 		newUrlCont = generateEndpoint(newQuery),
 		data = getData(newUrlCont, newQuery);
+	//reset input and radio
 	$('input[type="text"]').val('');
 	$('input[type="radio"]:checked').attr('checked', false);
 }
