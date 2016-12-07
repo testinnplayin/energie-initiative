@@ -576,7 +576,6 @@ function handleActions(e, map) {
 		data = getData(newUrlCont, newQuery);
 	//reset input and radio
 	$('input[type="text"]').val('');
-	$('input[type="radio"]:checked').attr('checked', false);
 }
 
 function handleSubmit(map) {
@@ -594,6 +593,7 @@ function handleSubmit(map) {
 }
 
 function handleInitialState() {
+	$('#inline-check-3').attr('checked', true);
 	var map = drawInitialMap();
 
 	handleSubmit(map);
