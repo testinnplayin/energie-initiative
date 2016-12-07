@@ -147,11 +147,17 @@ function drawInitialMap() {
 		"dataProvider" : {
 			"map" : "france2016Low",
 			"getAreasFromMap" : true,
-			"areas" : []
+			"areas" : [
+				{
+					'id' : 'FR-E',
+					'showAsSelected' : true
+				}
+			]
 		},
 		"areasSettings" : {
 			"autoZoom" : false,
 			"rollOverColor" : "#0F0",
+			"selectedColor" : "#66FF66",
 			"selectable" : false
 		}
 	});
@@ -164,7 +170,9 @@ function drawResultsMap(chartData, newRegion) {
 		"type" : "map",
 		"theme" : "light",
 		"zoomControl" : {
-			"homeButtonEnabled" : false
+			"homeButtonEnabled" : false,
+			"buttonFillColor" : "#66FF66",
+			"buttonBorderThickness" : 2
 		},
 		"dataProvider" : {
 			"map" : "france2016Low",
