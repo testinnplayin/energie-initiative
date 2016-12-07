@@ -311,8 +311,10 @@ function getData(addressCont, newQuery) { //the addresses will either be a singl
 
 function checkQuery(query) {
 	if (query === "" || query === undefined) {
+		$('.js-search-form-group > p').remove();
 		$('.js-search-form-group').append('<p>Saisissez le nom d\'une région valide.</p>')
 	} else { 
+		$('.js-search-form-group > p').remove();
 		var newQuery = processQuery(query);
 		var region = checkRegion(newQuery);
 
@@ -321,9 +323,11 @@ function checkQuery(query) {
 }
 
 function checkRegion(region) {
-	var keys = Object.keys(regionLibrary.newRegions);
+	var newKeys = Object.keys(regionLibrary.newRegions),
+		oldKeys = Object.keys(regionLibrary.oldRegions),
+		error = 'erreur';
 
-	for (var key of keys) {
+	for (var key of newKeys) {
 		if (region === key) {
 			var lng = Object.keys(regionLibrary.newRegions[region]).length;
 
@@ -333,7 +337,22 @@ function checkRegion(region) {
 			}
 		}
 	}
-	return region;
+
+	for (var key of oldKeys) {
+		if (region === key) {
+			var lng = Object.keys(regionLibrary.oldRegions[region]).length;
+
+			if (lng > 0) {
+				var oldRegion = regionLibrary.oldRegions[key];
+				return oldRegion;
+			}
+		}
+	}
+	$('input[type="text"]').val('');
+	$('.js-search-form-group > p').remove();
+	$('.js-search-form-group').append('<p>Saisissez le nom d\'une région valide.</p>');
+	
+	return error;
 }
 
 function checkState(currentState) {
@@ -389,6 +408,8 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 		}
 		regionContainer.push(newUrl);
 		return regionContainer; //"nouvelle-aquitaine" becomes ["aquitaine", "limousin", "poitou-charentes", "https://www.data.gouv.fr....."]
+	} else if (query === 'erreur') {
+		console.log("url not valid");
 	}
 
 	var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + regionLibrary.newRegions[newRegion][query] + "/initiatives_"
@@ -545,6 +566,7 @@ function handleActions(e, map) {
 		newQuery = checkQuery(query),
 		newUrlCont = generateEndpoint(newQuery),
 		data = getData(newUrlCont, newQuery);
+	$('input[type="text"]').val('');
 }
 
 function handleSubmit(map) {
