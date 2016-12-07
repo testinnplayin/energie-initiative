@@ -239,7 +239,7 @@ function displayResult(obj) {
 						+ "<p>Département: " + prettyDept + "</p>"
 					+ "</li>"
 					+ "<li>"
-						+ "<p><a href=\"" + obj.url + "\" target=\"_blank\">Lien vers source</a></p>"
+						+ "<p><a href=\"" + obj.url + "\" target=\"_blank\">Lire l'initiative</a></p>"
 					+ "</li>"
 				+ "</ul>"
 		+ "</div>"
@@ -311,7 +311,7 @@ function getData(addressCont, newQuery) { //the addresses will either be a singl
 
 function checkQuery(query) {
 	if (query === "" || query === undefined) {
-		$('.js-search-form-group').append('<p>Please enter a valid region name</p>')
+		$('.js-search-form-group').append('<p>Saisissez le nom d\'une région valide.</p>')
 	} else { 
 		var newQuery = processQuery(query);
 		var region = checkRegion(newQuery);
