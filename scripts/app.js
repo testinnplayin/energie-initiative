@@ -575,6 +575,7 @@ function handleActions(e, map) {
 		newUrlCont = generateEndpoint(newQuery),
 		data = getData(newUrlCont, newQuery);
 	$('input[type="text"]').val('');
+	$('input[type="radio"]:checked').attr('checked', false);
 }
 
 function handleSubmit(map) {
