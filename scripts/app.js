@@ -151,8 +151,8 @@ function drawInitialMap() {
 		},
 		"areasSettings" : {
 			"autoZoom" : false,
-			"rollOverColor" : "#F00",
-			"selectedColor" : "#FF0"
+			"rollOverColor" : "#0F0",
+			"selectable" : false
 		}
 	});
 	return map;
@@ -172,11 +172,11 @@ function drawResultsMap(chartData, newRegion) {
 		}
 	});
 
-	newMap.dataProvider.areas.push({ 'id': mapId, 'selectable' : true, 'showAsSelected' : true });
+	newMap.dataProvider.areas.push({ 'id': mapId, 'selectable' : false, 'showAsSelected' : true });
 	newMap.areasSettings = {
 		autoZoom: true,
-		"rollOverColor" : "#F00",
-		"selectedColor" : "#F0F"
+		rollOverColor : "#0F0",
+		selectedColor : "#66FF66"
 	};
 	newMap.write("mapdiv");
 
