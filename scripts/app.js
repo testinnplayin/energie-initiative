@@ -399,7 +399,6 @@ function calculateThemeFreq(objArr) { //an example chartData will be [{ 'theme' 
 	drawResultsMap(chartData, newRegion);
 }
 
-
 function generateEndpoint(query) { //for nouvelle-aquitaine we have an object containing three different old regions and their times of addition to the database, for alsace we have a string
 	var regionContainer = [],
 		newRegion = convertToNewReg(query);
