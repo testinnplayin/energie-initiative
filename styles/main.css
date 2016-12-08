@@ -1,8 +1,38 @@
 /* GENERAL STYLES */
 
+@font-face{ 
+	font-family: 'MyWebFont';
+	src: url('web\ fonts/amble_regular_macroman/Amble-Regular-webfont.eot');
+	src: url('web\ fonts/amble_regular_macroman/Amble-Regular-webfont.eot?iefix') format('eot'),
+	     url('web\ fonts/amble_regular_macroman/Amble-Regular-webfont.woff') format('woff'),
+	     url('web\ fonts/amble_regular_macroman/Amble-Regular-webfont.ttf') format('truetype'),
+	     url('web\ fonts/amble_regular_macroman/Amble-Regular-webfont.svg#webfont') format('svg');
+	src: url(web\ fonts/amble_bold_macroman/Amble-Bold-webfont.eot),
+		 url('web\ fonts/amble_bold_macroman/Amble-Bold-webfont.eot?fix') format('eot'),
+		 url('web\ fonts/amble_bold_macroman/Amble-Bold-webfont.woff') format('woff'),
+		 url('web\ fonts/amble_bold_macroman/Amble-Bold-webfont.ttf') format('truetype'),
+		 url('web\ fonts/amble_bold_macroman/Amble-Bold-webfont.svg#webfont') format('svg');
+}
+
+h1,
+h3,
+p,
+.panel-default>.panel-heading {
+	font-family: 'MyWebFont', Helvetica, Arial, sans-serif;
+}
+
 h1,
 h3 {
 	text-align: center;
+}
+
+p {
+	font-size: 16px;
+}
+
+h1 {
+	font-size: 45px;
+	color: #FF4800;
 }
 
 
@@ -13,7 +43,6 @@ header {
 	background-color: #1020A6;
 }
 
-h1,
 header p {
 	color: #fff;
 }
@@ -122,7 +151,10 @@ main > .container {
 
 .panel-heading {
 	height: 100px;
-	background-color: #70FF19;
+}
+
+.panel-default>.panel-heading {
+	font-size: 18px;
 }
 
 
