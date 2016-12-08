@@ -590,6 +590,12 @@ function handleSubmit(map) {
 			handleActions(e, map);
 		}
 	});
+
+	$('path').click(function(e) {
+		var region = $(this).attr('aria-label');
+		console.log(region);
+		//handleActions(e, map);
+	});
 }
 
 function handleInitialState() {
