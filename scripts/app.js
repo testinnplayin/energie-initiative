@@ -195,6 +195,7 @@ function drawResultsMap(chartData, newRegion) {
 	},200);
 
 	var chart = drawChart(chartData, prettyRegion);
+	$('input[value="' + newRegion + '"]').prop('checked', true);
 }
 
 function drawChart(chartData, newRegion) {
