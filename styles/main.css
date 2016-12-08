@@ -1,8 +1,7 @@
 /* GENERAL STYLES */
 
 h1,
-h3,
-p {
+h3 {
 	text-align: center;
 }
 
@@ -18,7 +17,7 @@ p {
 /* MAP BOX STYLES */
 
 .map {
-	margin: 0 auto 20px auto;
+	margin: 120px auto;
 	position:relative;
 }
 
@@ -46,7 +45,7 @@ p {
 /* CHECKBOX STYLES */
 
 .checkbox-container {
-	padding-top: 100px;
+	padding-top: 25px;
 }
 
 
@@ -75,7 +74,7 @@ p {
 	}
 
 	.checkbox-container {
-		padding-top: 50px;
+		padding-top: 25px;
 	}
 
 	.checkboxes {

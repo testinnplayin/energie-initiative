@@ -12,7 +12,7 @@
 <body>
 	<header>
 		<div class="container">
-			<h1>Visionneuse des initiatives vertes en France en 2015</h1>
+			<h1>Visionneuse des initiatives vertes en France métropolitaine en 2015</h1>
 			<p>Sélectionnez une région depuis la liste d'en-dessous ou saisissez le nom d'une région dans la boîte de recherche pour obtenir les initiatives vertes par thème écologique publiées en 2015 sur le site <a href="http://www.votreenergiepourlafrance.fr" target="_blank">Votre Energie pour la France</a>. Les résultats seront affichés sous la carte de la France.</p>
 			<p>Le diagramme circulaire dessiné sur la carte résultante illustre la répartition des initiatives par thème pour la région concernée.</p>
 			<p>Vous pouvez aussi saisir les dénominations prédatant 2016.</p>
@@ -24,17 +24,6 @@
 		<div class="container">
 			<section class="search-box">
 				<form class="form-like search-form js-search-form">
-					<div class="form-group search-group js-search-group">
-						<label for="search-term" class="sr-only">Recherche région</label>
-						<div class="col-xs-12 col-md-10">
-							<input type="text" class="form-control" id="search-term" placeholder="Recherche région" />
-						</div>
-					</div>
-					<div class="form-group js-search-form-group">
-						<div class="col-xs-2">
-							<button class="btn btn-default search-btn js-search-btn" type="submit">Recherche</button>
-						</div>
-					</div>
 					<div class="form-group checkbox-container">
 						<h3>Régions (dénominations anciennes)</h3>
 						<div class="radio-inline checkboxes">
@@ -63,49 +52,44 @@
 								Grand-Est (Alsace, Lorraine)
 							</label>
 							<label for="inline-check-7" class="col-xs-6 col-sm-4 col-md-4">
-								<input name = "map" type="radio" id="inline-check-7" value="guadeloupe" />
-								Guadeloupe
-							</label>
-							<label for="inline-check-8" class="col-xs-6 col-sm-4 col-md-4">
-								<input name = "map" type="radio" id="inline-check-8" value="guyane" />
-								Guyane
-							</label>
-							<label for="inline-check-9" class="col-xs-6 col-sm-4 col-md-4">
-								<input name = "map" type="radio" id="inline-check-9" value="hauts-de-france" />
+								<input name = "map" type="radio" id="inline-check-7" value="hauts-de-france" />
 								Hauts-de-France (Nord-Pas-de-Calais, Picardie)
 							</label>
-							<label for="inline-check-10" class="col-xs-6 col-sm-4 col-md-4">
-								<input name = "map" type="radio" id="inline-check-10" value="ile-de-france" />
+							<label for="inline-check-8" class="col-xs-6 col-sm-4 col-md-4">
+								<input name = "map" type="radio" id="inline-check-8" value="ile-de-france" />
 								Île-de-France
 							</label>
-							<label for="inline-check-11" class="col-xs-6 col-sm-4 col-md-4">
-								<input name = "map" type="radio" id="inline-check-11" value="la-reunion" />
-								La Réunion
-							</label>
-							<label for="inline-check-12" class="col-xs-6 col-sm-4 col-md-4">
-								<input name = "map" type="radio" id="inline-check-12" value="martinique" />
-								Martinique
-							</label>
-							<label for="inline-check-13" class="col-xs-6 col-sm-4 col-md-4">
-								<input name = "map" type="radio" id="inline-check-13" value="normandie" />
+							<label for="inline-check-9" class="col-xs-6 col-sm-4 col-md-4">
+								<input name = "map" type="radio" id="inline-check-9" value="normandie" />
 								Normandie (Haute-Normandie, Basse-Normande)
 							</label>
-							<label for="inline-check-14" class="col-xs-6 col-sm-4 col-md-4">
-								<input name = "map" type="radio" id="inline-check-14" value="nouvelle-aquitaine" />
+							<label for="inline-check-10" class="col-xs-6 col-sm-4 col-md-4">
+								<input name = "map" type="radio" id="inline-check-10" value="nouvelle-aquitaine" />
 								Nouvelle-Aquitaine (Aquitaine, Limousin, Poitou-Charentes)
 							</label>
-							<label for="inline-check-15" class="col-xs-6 col-sm-4 col-md-4">
-								<input name = "map" type="radio" id="inline-check-15" value="occitanie" />
+							<label for="inline-check-11" class="col-xs-6 col-sm-4 col-md-4">
+								<input name = "map" type="radio" id="inline-check-11" value="occitanie" />
 								Occitanie (Midi-Pyrénées)
 							</label>
-							<label for="inline-check-16" class="col-xs-6 col-sm-4 col-md-4">
-								<input name = "map" type="radio" id="inline-check-16" value="pays-de-la-loire" />
+							<label for="inline-check-12" class="col-xs-6 col-sm-4 col-md-4">
+								<input name = "map" type="radio" id="inline-check-12" value="pays-de-la-loire" />
 								Pays de la Loire
 							</label>
-							<label for="inline-check-17" class="col-xs-6 col-sm-4 col-md-4">
-								<input name = "map" type="radio" id="inline-check-17" value="provence-alpes-cote-dazur" />
+							<label for="inline-check-13" class="col-xs-6 col-sm-4 col-md-4">
+								<input name = "map" type="radio" id="inline-check-13" value="provence-alpes-cote-dazur" />
 								Provence-Alpes-Côte d'Azur
 							</label>
+						</div>
+					</div>
+					<div class="form-group search-group js-search-group">
+						<label for="search-term" class="sr-only">Recherche région</label>
+						<div class="col-xs-12 col-md-10">
+							<input type="text" class="form-control" id="search-term" placeholder="Recherche région" />
+						</div>
+					</div>
+					<div class="form-group js-search-form-group">
+						<div class="col-xs-2">
+							<button class="btn btn-default search-btn js-search-btn" type="submit">Recherche</button>
 						</div>
 					</div>
 				</form>
