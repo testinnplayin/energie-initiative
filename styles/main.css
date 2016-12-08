@@ -7,11 +7,65 @@ h3 {
 
 
 
+/* HEADER STYLES */
+
+header {
+	background-color: #1020A6;
+}
+
+h1,
+header p {
+	color: #fff;
+}
+
+header a,
+header a:link {
+	color: #B23F12;
+}
+
+header a:visited {
+	color: #888;
+}
+
+header a:hover {
+	color: #FF4800;
+}
+
+header a:active {
+	color: #FF4800;
+	font-size: 18px;
+}
+
+/* MAIN STYLES */
+
+main,
+.search-btn {
+	background-color: #70FF19;
+}
+
+main > .container {
+	background-color: #fff;
+}
+
+
+
 /* SEARCH BOX STYLES */
 
 .search-btn {
 	margin: 10px 0;
+	border: 1px solid black;
 }
+
+.search-btn:hover,
+.search-btn:focus {
+	background-color: #2A610A;
+}
+
+#search-term:hover,
+#search-term:focus {
+	border: 1px solid #2A610A;
+}
+
 
 
 /* MAP BOX STYLES */
@@ -29,6 +83,8 @@ h3 {
 	margin-right: auto;
 	position: relative;
 }
+
+
 
 /* CHART STYLES */
 
@@ -60,8 +116,13 @@ h3 {
 	text-align: left;
 }
 
+.panel:hover {
+	border: 1px solid #2A610A;
+}
+
 .panel-heading {
 	height: 100px;
+	background-color: #70FF19;
 }
 
 
