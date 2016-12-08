@@ -260,7 +260,7 @@ function renderState(currentState, data, addressCont) {
 	if (currentState === "results") {
 		var result;
 		$('.js-result-container').find('.panel').remove();
-
+		$('.col-xs-2').last().removeClass('hidden');
 		if (Array.isArray(addressCont)) {
 			var lng = Object.keys(data[1]).length;
 

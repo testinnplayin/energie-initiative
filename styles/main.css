@@ -1,24 +1,125 @@
 /* GENERAL STYLES */
 
+@font-face{ 
+	font-family: 'MyWebFont';
+	src: url('web\ fonts/amble_regular_macroman/Amble-Regular-webfont.eot');
+	src: url('web\ fonts/amble_regular_macroman/Amble-Regular-webfont.eot?iefix') format('eot'),
+	     url('web\ fonts/amble_regular_macroman/Amble-Regular-webfont.woff') format('woff'),
+	     url('web\ fonts/amble_regular_macroman/Amble-Regular-webfont.ttf') format('truetype'),
+	     url('web\ fonts/amble_regular_macroman/Amble-Regular-webfont.svg#webfont') format('svg');
+	src: url(web\ fonts/amble_bold_macroman/Amble-Bold-webfont.eot),
+		 url('web\ fonts/amble_bold_macroman/Amble-Bold-webfont.eot?fix') format('eot'),
+		 url('web\ fonts/amble_bold_macroman/Amble-Bold-webfont.woff') format('woff'),
+		 url('web\ fonts/amble_bold_macroman/Amble-Bold-webfont.ttf') format('truetype'),
+		 url('web\ fonts/amble_bold_macroman/Amble-Bold-webfont.svg#webfont') format('svg');
+}
+
 h1,
 h3,
-p {
+p,
+.panel-default>.panel-heading {
+	font-family: 'MyWebFont', Helvetica, Arial, sans-serif;
+}
+
+h1,
+h3 {
 	text-align: center;
+}
+
+p {
+	font-size: 16px;
+}
+
+h1 {
+	font-size: 45px;
+	color: #FF4800;
+}
+
+.leaf {
+	color: #70FF19;
+}
+
+
+
+/* HEADER STYLES */
+
+header {
+	background-color: #1020A6;
+}
+
+header p {
+	color: #fff;
+}
+
+header a,
+header a:link {
+	color: #B23F12;
+}
+
+header a:visited {
+	color: #888;
+}
+
+header a:hover {
+	color: #FF4800;
+}
+
+header a:active {
+	color: #FF4800;
+	font-size: 18px;
+}
+
+/* MAIN STYLES */
+
+main,
+.search-btn,
+.result-btn {
+	background-color: #70FF19;
+}
+
+main > .container {
+	background-color: #fff;
 }
 
 
 
 /* SEARCH BOX STYLES */
 
+.search-btn,
+.result-btn {
+	border: 1px solid black;
+}
+
 .search-btn {
 	margin: 10px 0;
 }
+
+.search-btn:hover,
+.search-btn:focus,
+.result-btn:hover,
+.result-btn:focus {
+	background-color: #2A610A;
+}
+
+#search-term:hover,
+#search-term:focus {
+	border: 1px solid #2A610A;
+}
+
+.result-btn {
+	margin-left: 50px;
+}
+
+.hidden {
+	display: none;
+}
+
 
 
 /* MAP BOX STYLES */
 
 .map {
-	margin: 0 auto 20px auto;
+	margin: 120px auto;
 	position:relative;
 }
 
@@ -30,6 +131,8 @@ p {
 	margin-right: auto;
 	position: relative;
 }
+
+
 
 /* CHART STYLES */
 
@@ -46,7 +149,7 @@ p {
 /* CHECKBOX STYLES */
 
 .checkbox-container {
-	padding-top: 100px;
+	padding-top: 25px;
 }
 
 
@@ -61,8 +164,16 @@ p {
 	text-align: left;
 }
 
+.panel:hover {
+	border: 1px solid #2A610A;
+}
+
 .panel-heading {
 	height: 100px;
+}
+
+.panel-default>.panel-heading {
+	font-size: 18px;
 }
 
 
@@ -74,8 +185,13 @@ p {
 		margin: 0;
 	}
 
+	.result-btn {
+		margin-top: 10px;
+		margin-left: 0;
+	}
+
 	.checkbox-container {
-		padding-top: 50px;
+		padding-top: 25px;
 	}
 
 	.checkboxes {
