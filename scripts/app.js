@@ -148,10 +148,6 @@ function drawInitialMap() {
 			"map" : "france2016Low",
 			"getAreasFromMap" : true,
 			"areas" : [
-				// {
-				// 	'id' : 'FR-E',
-				// 	'showAsSelected' : true
-				// }
 			]
 		},
 		"areasSettings" : {
@@ -242,7 +238,7 @@ function displayResult(obj) {
 						+ "<p>Thème: " + obj.theme + "</p>"
 					+ "</li>"
 					+ "<li>"
-						+ "<p>Région: " + prettyRegion + "</p>" //Note: Can prettify this later on if feel need; data[i][i-1].location.region
+						+ "<p>Région: " + prettyRegion + "</p>"
 					+ "</li>"
 					+ "<li>"
 						+ "<p>Département: " + prettyDept + "</p>"
@@ -506,7 +502,6 @@ function convertToNewReg(query) { //converts an old region name to a new region 
 			return newRegion;
 		} else if (Array.isArray(query)) {
 			for (var item of query) {
-				console.log('array branch triggered');
 				if (item === oldRegion) {
 					newRegion = regionLibrary.oldRegions[oldRegion];
 					return newRegion;
@@ -606,7 +601,6 @@ function handleSubmit(map) {
 }
 
 function handleInitialState() {
-	//$('#inline-check-3').attr('checked', true);
 	var map = drawInitialMap();
 
 	handleSubmit(map);
