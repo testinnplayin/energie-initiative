@@ -147,12 +147,18 @@ function drawInitialMap() {
 		"dataProvider" : {
 			"map" : "france2016Low",
 			"getAreasFromMap" : true,
-			"areas" : []
+			"areas" : [
+				// {
+				// 	'id' : 'FR-E',
+				// 	'showAsSelected' : true
+				// }
+			]
 		},
 		"areasSettings" : {
 			"autoZoom" : false,
 			"rollOverColor" : "#0F0",
-			"selectable" : false
+			"selectedColor" : "#66FF66",
+			"selectable" : true
 		}
 	});
 	return map;
@@ -164,7 +170,9 @@ function drawResultsMap(chartData, newRegion) {
 		"type" : "map",
 		"theme" : "light",
 		"zoomControl" : {
-			"homeButtonEnabled" : false
+			"homeButtonEnabled" : false,
+			"buttonFillColor" : "#66FF66",
+			"buttonBorderThickness" : 2
 		},
 		"dataProvider" : {
 			"map" : "france2016Low",
@@ -187,6 +195,7 @@ function drawResultsMap(chartData, newRegion) {
 	},200);
 
 	var chart = drawChart(chartData, prettyRegion);
+	$('input[value="' + newRegion + '"]').prop('checked', true);
 }
 
 function drawChart(chartData, newRegion) {
@@ -252,7 +261,7 @@ function renderState(currentState, data, addressCont) {
 	if (currentState === "results") {
 		var result;
 		$('.js-result-container').find('.panel').remove();
-
+		$('.col-xs-2').last().removeClass('hidden');
 		if (Array.isArray(addressCont)) {
 			var lng = Object.keys(data[1]).length;
 
@@ -315,9 +324,8 @@ function checkQuery(query) {
 		$('.js-search-form-group').append('<p>Saisissez le nom d\'une région valide.</p>')
 	} else { 
 		$('.js-search-form-group > p').remove();
-		var newQuery = processQuery(query);
-		var region = checkRegion(newQuery);
-
+		var newQuery = processQuery(query),
+			region = checkRegion(newQuery);
 		return region;
 	}
 }
@@ -340,13 +348,10 @@ function checkRegion(region) {
 
 	for (var key of oldKeys) {
 		if (region === key) {
-			var lng = Object.keys(regionLibrary.oldRegions[region]).length;
-
-			if (lng > 0) {
-				var oldRegion = regionLibrary.oldRegions[key];
-				return oldRegion;
-			}
+			return region;
 		}
+
+
 	}
 	$('input[type="text"]').val('');
 	$('.js-search-form-group > p').remove();
@@ -398,7 +403,6 @@ function calculateThemeFreq(objArr) { //an example chartData will be [{ 'theme' 
 function generateEndpoint(query) { //for nouvelle-aquitaine we have an object containing three different old regions and their times of addition to the database, for alsace we have a string
 	var regionContainer = [],
 		newRegion = convertToNewReg(query);
-
 	if (typeof query === 'object') { //branch followed for a new region containing multiple old regions, goes to the large file containing all regions
 		var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + regionLibrary.newRegions['lensemble']['all']
 		+ "/initiatives_all.json";
@@ -407,11 +411,12 @@ function generateEndpoint(query) { //for nouvelle-aquitaine we have an object co
 			regionContainer.push(region);
 		}
 		regionContainer.push(newUrl);
+
 		return regionContainer; //"nouvelle-aquitaine" becomes ["aquitaine", "limousin", "poitou-charentes", "https://www.data.gouv.fr....."]
 	} else if (query === 'erreur') {
 		console.log("url not valid");
 	}
-
+	
 	var newUrl = "https://www.data.gouv.fr/s/resources/liste-des-initiatives-geolocalisees-issues-du-site-votreenergiepourlafrance-fr/20151029-" + regionLibrary.newRegions[newRegion][query] + "/initiatives_"
 	+ query + ".json";
 
@@ -502,6 +507,7 @@ function convertToNewReg(query) { //converts an old region name to a new region 
 			return newRegion;
 		} else if (Array.isArray(query)) {
 			for (var item of query) {
+				console.log('array branch triggered');
 				if (item === oldRegion) {
 					newRegion = regionLibrary.oldRegions[oldRegion];
 					return newRegion;
@@ -509,6 +515,7 @@ function convertToNewReg(query) { //converts an old region name to a new region 
 			}
 		}
 	}
+
 }
 
 function stripAccent(processedQ) {
@@ -559,6 +566,15 @@ function processQuery(query) { //renders all letters to lowercase and has functi
 
 //event handler functions
 
+function handleMapClick(region) {
+	console.log(region);
+	var processedRegion = checkQuery(region);
+	console.log(processedRegion);
+	var newUrlCont = generateEndpoint(processedRegion);
+	console.log(newUrlCont);
+	var data = getData(newUrlCont, processedRegion);
+}
+
 function handleActions(e, map) {
 	e.preventDefault();
 
@@ -566,6 +582,7 @@ function handleActions(e, map) {
 		newQuery = checkQuery(query),
 		newUrlCont = generateEndpoint(newQuery),
 		data = getData(newUrlCont, newQuery);
+	//reset input and radio
 	$('input[type="text"]').val('');
 }
 
@@ -581,9 +598,16 @@ function handleSubmit(map) {
 			handleActions(e, map);
 		}
 	});
+
+	$('path').click(function(e) {
+		var region = $(this).attr('aria-label').trim();
+		console.log(region);
+		handleMapClick(region);
+	});
 }
 
 function handleInitialState() {
+	//$('#inline-check-3').attr('checked', true);
 	var map = drawInitialMap();
 
 	handleSubmit(map);
