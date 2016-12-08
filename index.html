@@ -20,7 +20,7 @@
 		</div>
 	</header>
 
-	<main>
+	<main id="top">
 		<div class="container">
 			<section class="search-box">
 				<form class="form-like search-form js-search-form">
@@ -91,6 +91,9 @@
 						<div class="col-xs-2">
 							<button class="btn btn-default search-btn js-search-btn" type="submit">Recherche</button>
 						</div>
+						<div class="col-xs-2 hidden">
+						<a class="btn btn-default result-btn" type="btn" href="#results">Aller aux résultats</a>
+						</div>
 					</div>
 				</form>
 			</section>
@@ -103,7 +106,8 @@
 					<!-- map goes here -->
 				</div>
 			</section>
-			<section class="results">
+			<section class="results" id="results">
+				<a href="#top">Aller au début</a><br />
 				<div class="result-container js-result-container">
 					<!-- results load here -->
 				</div>
